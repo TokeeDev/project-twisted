@@ -1,12 +1,12 @@
-// src/components/FeaturedEvent.tsx
+// src/components/events/FeaturedEvent.tsx
 import React from "react";
-import Image from "next/image"; // Using Next.js Image component
+import Image from "next/image";
 import Link from "next/link";
+import { Instagram } from "lucide-react";
 
-// Define expected props if you plan to pass event data dynamically
+// Define expected props for event data
 interface FeaturedEventProps {
   event?: {
-    // Example structure - adapt as needed
     title: string;
     dateTime: string;
     djs: string;
@@ -17,156 +17,133 @@ interface FeaturedEventProps {
   };
 }
 
-// Default data for placeholder - replace with actual fetched/static data
+// Default event data
 const defaultEvent = {
   title: "Synthwave Saturdays",
   dateTime: "Every Saturday | 9 PM - 2 AM",
   djs: "DJ Neon & Vector Hold",
   specials: "$5 Cyber Sunrise Cocktails",
-  imageUrl: "/path/to/your-event-poster-9x16.jpg", // *** IMPORTANT: Update this path ***
-  instagramHandle: "@TwistedCantina",
-  instagramLink: "https://instagram.com/TwistedCantina", // *** IMPORTANT: Update this link ***
+  imageUrl: "/images/events/synthwave-poster.jpg", // Update with your actual image path
+  instagramHandle: "@twistedcantina",
+  instagramLink: "https://instagram.com/twistedcantina", // Update with your actual Instagram link
 };
 
 const FeaturedEvent: React.FC<FeaturedEventProps> = ({
   event = defaultEvent,
 }) => {
   return (
-    // Section using black background to blend smoothly after the hero. Increased padding.
     <section
-      id="featured"
-      className="py-20 md:py-28 px-4 bg-black text-white"
-      data-oid=":5u-.:q"
+      className="py-16 md:py-1 px-4 bg-twisted-darker text-white"
+      data-oid="tak3wdf"
     >
-      {" "}
-      {/* Changed bg-brand-black to bg-black */}
-      <div className="container mx-auto" data-oid="38s7hxf">
-        {/* Centered "Featured" Title - Larger and using a neon color (match Hero's text-twisted-neon if defined) */}
+      <div className="container mx-auto" data-oid="757tg73">
+        {/* Featured heading with neon green styling */}
 
-        {/* Main content container: Uses Flexbox for side-by-side layout on medium screens and up */}
-        <div
-          className="flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-16 lg:gap-20"
-          data-oid="aj708_w"
+        {/* Main content container */}
+
+        <h2
+          className="text-5xl md:text-6xl font-bold text-twisted-neon text-right mb-12 md:mb-16"
+          data-oid="gvmknj3"
+          key="olk-ICVP"
         >
-          {/* Image Container (Left on Desktop) */}
-          {/* Larger width allocation (40% to 50%). Responsive max-width. order-2 ensures it's below text on mobile */}
-
+          Featured
+        </h2>
+        <div
+          className="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-16"
+          data-oid="knppah6"
+        >
+          {/* Phone-shaped image container - Left side */}
           <div
-            className="flex-1 order-1 md:order-2 text-center md:text-left md:pl-4 lg:pl-6"
-            data-oid="q0oxg2t"
-            key="olk-LzLP"
+            className="w-full md:w-1/2 lg:w-2/5 flex justify-center"
+            data-oid="::how4b"
           >
-            {/* Event Title - Significantly larger */}
-            <h3
-              className="text-4xl md:text-5xl lg:text-6xl font-heading text-white mb-5 md:mb-6"
-              data-oid="h_9nngo"
-            >
-              {event.title}
-            </h3>
-            {/* Event Details - Larger font sizes */}
-            <p
-              className="text-xl md:text-2xl lg:text-3xl text-gray-300 font-body mb-4 md:mb-5"
-              data-oid="3ont01u"
-            >
-              {event.dateTime}
-            </p>
-            <p
-              className="text-lg md:text-xl lg:text-2xl text-gray-400 font-body mb-4 md:mb-5"
-              data-oid="6rn_b7l"
-            >
-              DJs: {event.djs}
-            </p>
-            <p
-              className="text-lg md:text-xl lg:text-2xl text-gray-400 font-body mb-6 md:mb-8"
-              data-oid="bl7bk6e"
-            >
-              Specials: {event.specials}
-            </p>
-            {/* Instagram Link - Larger and styled */}
-            <Link
-              href={event.instagramLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block text-neon-green text-lg md:text-xl lg:text-2xl font-body hover:underline hover:animate-buzz transition-all duration-150" // Assuming animate-buzz is defined
-              data-oid="azq8jb_"
-            >
-              {event.instagramHandle}
-            </Link>
-          </div>
-          <div
-            className="w-full md:w-2/5 lg:w-[45%] order-2 md:order-1 flex justify-center md:justify-start"
-            data-oid="2tt35tj"
-          >
-            {/* Relative container needed for Image with layout="fill" */}
             <div
-              className="relative w-full max-w-md lg:max-w-lg xl:max-w-xl aspect-[9/16] overflow-hidden rounded-lg shadow-2xl border-2 border-neon-green/60"
-              data-oid="vx3:a2i"
+              className="relative w-full max-w-[280px] aspect-[9/16] rounded-[32px] border-2 border-twisted-neon overflow-hidden"
+              data-oid="p-3n4t0"
             >
-              {" "}
-              {/* Added border like Hero video */}
+              {/* Time display overlay */}
+              <div
+                className="absolute top-6 left-0 right-0 z-10 text-center text-white text-xl font-medium"
+                data-oid="vakanm."
+              >
+                9:16
+              </div>
+
+              {/* Image placeholder text - will be replaced by actual image */}
+              <div
+                className="absolute inset-0 flex items-center justify-center text-white/70 text-lg"
+                data-oid="f53g05w"
+              >
+                image
+              </div>
+
               <Image
                 src={event.imageUrl}
-                alt={`${event.title} Poster`}
-                layout="fill" // Fill the container
-                objectFit="cover" // Cover the area without stretching
-                className="transition-transform duration-300 ease-in-out hover:scale-105 top-auto right-auto bottom-auto left-auto absolute" // Optional subtle zoom on hover
-                priority // Consider adding priority if this image is often above the fold after scroll
-                data-oid="qpijem8"
+                alt={`${event.title} Event`}
+                fill
+                sizes="(max-width: 768px) 80vw, (max-width: 1200px) 40vw, 33vw"
+                className="object-cover"
+                priority
+                data-oid="grv1s1j"
               />
             </div>
           </div>
 
-          {/* Details Container (Right on Desktop) */}
-          {/* flex-1 takes remaining space. order-1 ensures it's above image on mobile. Increased padding for gap. */}
-        </div>
-        <h2
-          className="text-5xl md:text-6xl lg:text-7xl font-heading text-neon-green text-center mb-16 md:mb-20"
-          data-oid="dv6s8j6"
-          key="olk-dh-D"
-        >
-          {" "}
-          {/* Assuming text-neon-green is defined */}
-          Featured
-        </h2>
-      </div>
-      {/* Ensure necessary styles are defined in tailwind.config or globals.css */}
-      {/* Example style block if needed, but prefer defining in config/globals */}
-      <style jsx global data-oid="jfd:1.r">{`
-        .text-neon-green {
-          color: #2cff05;
-        } /* Match this to your theme */
-        .border-neon-green\\/60 {
-          border-color: rgba(44, 255, 5, 0.6);
-        }
-        .font-heading {
-          font-family: /* Your heading font */;
-        } /* E.g., 'PixelFontName1', sans-serif */
-        .font-body {
-          font-family: /* Your body font */;
-        } /* E.g., 'PixelFontName2', sans-serif */
+          {/* Event details - Right side */}
+          <div
+            className="w-full md:w-1/2 lg:w-3/5 space-y-4 md:space-y-6 normal-case"
+            data-oid="ivwz-i2"
+          >
+            {/* Title */}
+            <h3
+              className="text-3xl md:text-4xl font-bold text-twisted-neon"
+              data-oid="tvx_ygx"
+            >
+              {event.title}
+            </h3>
 
-        /* Ensure 'animate-buzz' corresponds to a keyframe animation in tailwind.config.js */
-        /* Example (should be in tailwind.config.js ideally):
-        theme: {
-          extend: {
-            keyframes: {
-              buzz: {
-                '0%, 100%': { transform: 'translate(0, 0)' },
-                '25%': { transform: 'translate(-1px, 1px)' },
-                '50%': { transform: 'translate(1px, -1px)' },
-                '75%': { transform: 'translate(1px, 1px)' },
-              },
-            },
-            animation: {
-              buzz: 'buzz 0.1s infinite linear',
-            },
-          },
-        },
-        */
-        .hover\\:animate-buzz:hover {
-          animation: buzz 0.1s infinite linear; /* Direct application if needed */
-        }
-      `}</style>
+            {/* Date and Time */}
+            <p className="text-xl md:text-2xl text-white" data-oid="fdsq-dx">
+              {event.dateTime}
+            </p>
+
+            {/* DJs */}
+            <p className="text-lg md:text-xl text-white/80" data-oid="atdvcat">
+              {event.djs}
+            </p>
+
+            {/* Specials */}
+            <p className="text-lg md:text-xl text-white/80" data-oid="c3ey93i">
+              {event.specials}
+            </p>
+
+            {/* View Event button */}
+            <div className="pt-4" data-oid="dfm:-w.">
+              <Link
+                href="/events"
+                className="inline-block px-6 py-3 border-2 border-twisted-neon text-twisted-neon font-medium rounded-md hover:bg-twisted-neon/10 transition-colors"
+                data-oid="p9g8i_j"
+              >
+                View Event
+              </Link>
+            </div>
+
+            {/* Instagram handle */}
+            <div className="pt-2" data-oid="wpxx97_">
+              <Link
+                href={event.instagramLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-white hover:text-twisted-neon transition-colors"
+                data-oid="jnt.rwk"
+              >
+                <Instagram size={20} data-oid="3fmtipk" />
+                <span data-oid="ifp7ym9">{event.instagramHandle}</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };

@@ -1,46 +1,98 @@
-'use client';
+"use client";
 
-import React from 'react';
+import React from "react";
 
 const MenuHero = () => {
   return (
-    <section className="relative py-20 md:py-32 bg-black text-white overflow-hidden border-b-4 border-white">
+    <section
+      className="relative py-20 md:py-32 bg-black text-white overflow-hidden border-b-4 border-white"
+      data-oid="gn7f2ss"
+    >
       {/* Background Elements - Distorted Grid/Lines */}
-      <div className="absolute inset-0 z-0 opacity-10">
+      <div className="absolute inset-0 z-0 opacity-10" data-oid="z3t1.rt">
         {/* Example: Add SVG or complex background patterns here for distortion */}
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
-              <path d="M 80 0 L 0 0 0 80" fill="none" stroke="#555" strokeWidth="1"/>
+        <svg
+          width="100%"
+          height="100%"
+          xmlns="http://www.w3.org/2000/svg"
+          data-oid="_32chdo"
+        >
+          <defs data-oid="aslzwbd">
+            <pattern
+              id="grid"
+              width="80"
+              height="80"
+              patternUnits="userSpaceOnUse"
+              data-oid="2-ip62g"
+            >
+              <path
+                d="M 80 0 L 0 0 0 80"
+                fill="none"
+                stroke="#555"
+                strokeWidth="1"
+                data-oid="1d4v21w"
+              />
             </pattern>
-            <filter id="distortion" x="0" y="0" width="100%" height="100%">
-              <feTurbulence type="fractalNoise" baseFrequency="0.01 0.04" numOctaves="2" result="warp"/>
-              <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="50" in="SourceGraphic" in2="warp" />
+            <filter
+              id="distortion"
+              x="0"
+              y="0"
+              width="100%"
+              height="100%"
+              data-oid="5dio4u3"
+            >
+              <feTurbulence
+                type="fractalNoise"
+                baseFrequency="0.01 0.04"
+                numOctaves="2"
+                result="warp"
+                data-oid="r75v-z-"
+              />
+
+              <feDisplacementMap
+                xChannelSelector="R"
+                yChannelSelector="G"
+                scale="50"
+                in="SourceGraphic"
+                in2="warp"
+                data-oid="yb9skw7"
+              />
             </filter>
           </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" filter="url(#distortion)"/>
+          <rect
+            width="100%"
+            height="100%"
+            fill="url(#grid)"
+            filter="url(#distortion)"
+            data-oid="j97sn95"
+          />
         </svg>
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-4 text-center">
-        <h1 
-          className="text-6xl md:text-8xl lg:text-9xl font-black mb-4 uppercase tracking-tighter" 
+      <div
+        className="relative z-10 container mx-auto px-4 text-center"
+        data-oid="w6vbpxj"
+      >
+        <h1
+          className="text-6xl md:text-8xl lg:text-9xl font-black mb-4 uppercase tracking-tighter"
           style={{
             fontFamily: '"Impact", "Arial Black", sans-serif', // Example bold font
-            textShadow: '2px 2px 0px #fff, 4px 4px 0px #555', // Simple shadow for depth
-            transform: 'skewX(-10deg)', // Slight skew for dynamic feel
-            letterSpacing: '-0.05em' // Tighten spacing
+            textShadow: "2px 2px 0px #fff, 4px 4px 0px #555", // Simple shadow for depth
+            transform: "skewX(-10deg)", // Slight skew for dynamic feel
+            letterSpacing: "-0.05em", // Tighten spacing
           }}
+          data-oid="07a0ju0"
         >
           Our Menu
         </h1>
-        <p 
-          className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto" 
+        <p
+          className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto"
           style={{
             fontFamily: '"Courier New", monospace', // Monospace for contrast
-            transform: 'skewX(-10deg)',
+            transform: "skewX(-10deg)",
           }}
+          data-oid="tec8z2p"
         >
           Explore our twisted creations. Bold flavors, unique combinations.
         </p>
@@ -48,13 +100,21 @@ const MenuHero = () => {
 
       {/* Graffiti/Street Art Elements (Optional - could be images/SVGs) */}
       {/* Example: Add absolutely positioned elements that look like paint splatters or tags */}
-      <div 
-        className="absolute bottom-0 left-5 w-24 h-24 bg-contain bg-no-repeat opacity-60" 
-        style={{ backgroundImage: 'url(/path/to/splatter1.svg)', transform: 'rotate(-15deg)' }} // Replace with actual SVG path
+      <div
+        className="absolute bottom-0 left-5 w-24 h-24 bg-contain bg-no-repeat opacity-60"
+        style={{
+          backgroundImage: "url(/path/to/splatter1.svg)",
+          transform: "rotate(-15deg)",
+        }} // Replace with actual SVG path
+        data-oid="0vw-mf7"
       ></div>
-      <div 
-        className="absolute top-10 right-5 w-32 h-16 bg-contain bg-no-repeat opacity-50" 
-        style={{ backgroundImage: 'url(/path/to/tag1.svg)', transform: 'rotate(10deg)' }} // Replace with actual SVG path
+      <div
+        className="absolute top-10 right-5 w-32 h-16 bg-contain bg-no-repeat opacity-50"
+        style={{
+          backgroundImage: "url(/path/to/tag1.svg)",
+          transform: "rotate(10deg)",
+        }} // Replace with actual SVG path
+        data-oid="adx_2a5"
       ></div>
     </section>
   );

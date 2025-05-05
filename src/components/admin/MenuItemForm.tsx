@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Utensils, DollarSign, Tag, Upload, Info } from 'lucide-react';
-import { generateReactHelpers } from '@uploadthing/react';
-import type { OurFileRouter } from '@/app/api/uploadthing/core';
+import React, { useState, useEffect } from "react";
+import { Utensils, DollarSign, Tag, Upload, Info } from "lucide-react";
+import { generateReactHelpers } from "@uploadthing/react";
+import type { OurFileRouter } from "@/app/api/uploadthing/core";
 
 // Initialize UploadThing helpers
 const { useUploadThing } = generateReactHelpers<OurFileRouter>();
@@ -14,14 +14,14 @@ interface MenuItemFormProps {
 }
 
 const MenuItemForm: React.FC<MenuItemFormProps> = ({ onSuccess }) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-  const [category, setCategory] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [category, setCategory] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string>('');
+  const [previewUrl, setPreviewUrl] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState({ text: '', type: '' });
+  const [message, setMessage] = useState({ text: "", type: "" });
 
   // Cleanup preview URL
   useEffect(() => {
@@ -32,26 +32,32 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({ onSuccess }) => {
     };
   }, [previewUrl]);
 
-  const { startUpload, isUploading } = useUploadThing('imageUploader', {
+  const { startUpload, isUploading } = useUploadThing("imageUploader", {
     onClientUploadComplete: async (res) => {
       if (!res || res.length === 0) {
-        setMessage({ text: 'Image upload failed or returned no URL.', type: 'error' });
+        setMessage({
+          text: "Image upload failed or returned no URL.",
+          type: "error",
+        });
         setIsSubmitting(false);
         return;
       }
       const imageUrl = res[0].url;
-      console.log('Image uploaded successfully:', imageUrl);
+      console.log("Image uploaded successfully:", imageUrl);
 
       // Now submit the rest of the form data along with the image URL
       await submitMenuItemData(imageUrl);
     },
     onUploadError: (error: Error) => {
-      console.error('Error uploading image:', error);
-      setMessage({ text: `Error uploading image: ${error.message}`, type: 'error' });
+      console.error("Error uploading image:", error);
+      setMessage({
+        text: `Error uploading image: ${error.message}`,
+        type: "error",
+      });
       setIsSubmitting(false); // Ensure submission state is reset on error
     },
     onUploadBegin: () => {
-      setMessage({ text: 'Uploading image...', type: 'info' });
+      setMessage({ text: "Uploading image...", type: "info" });
     },
   });
 
@@ -69,26 +75,26 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({ onSuccess }) => {
   };
 
   const resetForm = () => {
-    setName('');
-    setDescription('');
-    setPrice('');
-    setCategory('');
+    setName("");
+    setDescription("");
+    setPrice("");
+    setCategory("");
     setImageFile(null);
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
     }
-    setPreviewUrl('');
-    setMessage({ text: '', type: '' });
+    setPreviewUrl("");
+    setMessage({ text: "", type: "" });
     setIsSubmitting(false);
   };
 
   const submitMenuItemData = async (imageUrl: string) => {
-    setMessage({ text: 'Submitting menu item data...', type: 'info' });
+    setMessage({ text: "Submitting menu item data...", type: "info" });
     try {
-      const response = await fetch('/api/menu-items', {
-        method: 'POST',
+      const response = await fetch("/api/menu-items", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name,
@@ -101,17 +107,22 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({ onSuccess }) => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        throw new Error(
+          errorData.message || `HTTP error! status: ${response.status}`,
+        );
       }
 
-      setMessage({ text: 'Menu item created successfully!', type: 'success' });
+      setMessage({ text: "Menu item created successfully!", type: "success" });
       resetForm();
       if (onSuccess) onSuccess(); // Call success callback if provided
-
     } catch (error) {
-      console.error('Error submitting menu item:', error);
-      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-      setMessage({ text: `Error creating menu item: ${errorMessage}`, type: 'error' });
+      console.error("Error submitting menu item:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "An unknown error occurred";
+      setMessage({
+        text: `Error creating menu item: ${errorMessage}`,
+        type: "error",
+      });
     } finally {
       setIsSubmitting(false); // Ensure submission state is reset
     }
@@ -121,61 +132,101 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({ onSuccess }) => {
     e.preventDefault();
 
     if (!name || !price) {
-      setMessage({ text: 'Name and Price are required fields.', type: 'error' });
+      setMessage({
+        text: "Name and Price are required fields.",
+        type: "error",
+      });
       return;
     }
 
     if (!imageFile) {
-      setMessage({ text: 'Please upload a menu item image.', type: 'error' });
+      setMessage({ text: "Please upload a menu item image.", type: "error" });
       return;
     }
 
     setIsSubmitting(true);
-    setMessage({ text: 'Starting submission process...', type: 'info' });
+    setMessage({ text: "Starting submission process...", type: "info" });
 
     // Start image upload first
     try {
       await startUpload([imageFile]);
       // The rest of the submission logic happens in onClientUploadComplete
     } catch (error) {
-        // Error during the *initiation* of the upload (rare)
-        console.error("Error initiating upload:", error);
-        setMessage({ text: 'Error starting upload process.', type: 'error' });
-        setIsSubmitting(false);
+      // Error during the *initiation* of the upload (rare)
+      console.error("Error initiating upload:", error);
+      setMessage({ text: "Error starting upload process.", type: "error" });
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6 md:p-8 bg-gray-800/50 rounded-lg shadow-xl border border-gray-700">
-      <h2 className="text-2xl font-semibold mb-6 text-twisted-neon">Add New Menu Item</h2>
+    <div
+      className="w-full max-w-2xl mx-auto p-6 md:p-8 bg-gray-800/50 rounded-lg shadow-xl border border-gray-700"
+      data-oid="lopcz6g"
+    >
+      <h2
+        className="text-2xl font-semibold mb-6 text-twisted-neon"
+        data-oid="kgqp.4y"
+      >
+        Add New Menu Item
+      </h2>
 
       {/* Message Display */}
       {message.text && (
-        <div className={`mb-6 rounded-md p-3 text-sm text-center ${ 
-          message.type === 'success' ? 'bg-green-600/30 text-green-300 border border-green-500' :
-          message.type === 'error' ? 'bg-red-600/30 text-red-300 border border-red-500' :
-          'bg-blue-600/30 text-blue-300 border border-blue-500'
-        }`}>
+        <div
+          className={`mb-6 rounded-md p-3 text-sm text-center ${
+            message.type === "success"
+              ? "bg-green-600/30 text-green-300 border border-green-500"
+              : message.type === "error"
+                ? "bg-red-600/30 text-red-300 border border-red-500"
+                : "bg-blue-600/30 text-blue-300 border border-blue-500"
+          }`}
+          data-oid="8rpq5ra"
+        >
           {message.text}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6">
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 gap-6"
+        data-oid="i:r2hxn"
+      >
         {/* Image Upload Section */}
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">Item Image *</label>
-          <div className="relative mb-2 aspect-square w-full max-w-xs mx-auto overflow-hidden rounded-lg border-2 border-dashed border-gray-600 bg-gray-700/50">
+        <div data-oid="imwhyph">
+          <label
+            className="block text-sm font-medium text-gray-300 mb-2"
+            data-oid="fxv6h_o"
+          >
+            Item Image *
+          </label>
+          <div
+            className="relative mb-2 aspect-square w-full max-w-xs mx-auto overflow-hidden rounded-lg border-2 border-dashed border-gray-600 bg-gray-700/50"
+            data-oid="_r-enqn"
+          >
             {previewUrl ? (
-              <img src={previewUrl} alt="Menu item preview" className="h-full w-full object-cover" />
+              <img
+                src={previewUrl}
+                alt="Menu item preview"
+                className="h-full w-full object-cover"
+                data-oid="4.eg-pi"
+              />
             ) : (
-              <div className="flex h-full flex-col items-center justify-center p-4 text-center text-gray-500">
-                <Upload size={40} className="mb-2" />
-                <span>Image Preview</span>
+              <div
+                className="flex h-full flex-col items-center justify-center p-4 text-center text-gray-500"
+                data-oid="dhajq8k"
+              >
+                <Upload size={40} className="mb-2" data-oid="ysvljp_" />
+                <span data-oid="jguvba-">Image Preview</span>
               </div>
             )}
           </div>
-          <label htmlFor="image-upload" className="block w-full max-w-xs mx-auto cursor-pointer rounded-md bg-twisted-neon px-4 py-2 text-center text-sm font-semibold text-black transition hover:bg-twisted-neon/80">
-            {imageFile ? 'Change Image' : 'Select Image'}
+          <label
+            htmlFor="image-upload"
+            className="block w-full max-w-xs mx-auto cursor-pointer rounded-md bg-twisted-neon px-4 py-2 text-center text-sm font-semibold text-black transition hover:bg-twisted-neon/80"
+            data-oid="dpk3cxf"
+          >
+            {imageFile ? "Change Image" : "Select Image"}
           </label>
           <input
             id="image-upload"
@@ -184,17 +235,30 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({ onSuccess }) => {
             onChange={handleImageChange}
             className="hidden"
             required
+            data-oid="vlfn-o."
           />
         </div>
 
         {/* Text Fields */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          data-oid="wu9w40z"
+        >
           {/* Name */}
-          <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">Name *</label>
-            <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                <Utensils size={16} />
+          <div data-oid="sq8mu2t">
+            <label
+              htmlFor="name"
+              className="block text-sm font-medium text-gray-300 mb-1"
+              data-oid="jjc_.f9"
+            >
+              Name *
+            </label>
+            <div className="relative" data-oid="yp3w7wt">
+              <span
+                className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"
+                data-oid="ggrimg2"
+              >
+                <Utensils size={16} data-oid="jfe7qkh" />
               </span>
               <input
                 type="text"
@@ -203,16 +267,26 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({ onSuccess }) => {
                 onChange={(e) => setName(e.target.value)}
                 className="w-full pl-10 pr-3 py-2 rounded-md bg-gray-700 border border-gray-600 text-white focus:ring-1 focus:ring-twisted-neon focus:border-twisted-neon"
                 required
+                data-oid="y_hk23g"
               />
             </div>
           </div>
 
           {/* Price */}
-          <div>
-            <label htmlFor="price" className="block text-sm font-medium text-gray-300 mb-1">Price *</label>
-            <div className="relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-                <DollarSign size={16} />
+          <div data-oid="gtfpdq0">
+            <label
+              htmlFor="price"
+              className="block text-sm font-medium text-gray-300 mb-1"
+              data-oid="3zg-ymp"
+            >
+              Price *
+            </label>
+            <div className="relative" data-oid="l3-7eu5">
+              <span
+                className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"
+                data-oid="o3mhn0e"
+              >
+                <DollarSign size={16} data-oid="4d4:zir" />
               </span>
               <input
                 type="text" // Keep as text for flexibility (e.g., "$10", "Market Price")
@@ -222,17 +296,27 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({ onSuccess }) => {
                 className="w-full pl-10 pr-3 py-2 rounded-md bg-gray-700 border border-gray-600 text-white focus:ring-1 focus:ring-twisted-neon focus:border-twisted-neon"
                 placeholder="e.g., $12.99 or Market Price"
                 required
+                data-oid="l:t3fso"
               />
             </div>
           </div>
         </div>
 
         {/* Category */}
-        <div>
-          <label htmlFor="category" className="block text-sm font-medium text-gray-300 mb-1">Category</label>
-          <div className="relative">
-            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
-              <Tag size={16} />
+        <div data-oid="_8esj2v">
+          <label
+            htmlFor="category"
+            className="block text-sm font-medium text-gray-300 mb-1"
+            data-oid="uwhka-e"
+          >
+            Category
+          </label>
+          <div className="relative" data-oid="3sa5sjp">
+            <span
+              className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500"
+              data-oid="ax8c5uc"
+            >
+              <Tag size={16} data-oid="6gy2q27" />
             </span>
             <input
               type="text"
@@ -241,17 +325,27 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({ onSuccess }) => {
               onChange={(e) => setCategory(e.target.value)}
               className="w-full pl-10 pr-3 py-2 rounded-md bg-gray-700 border border-gray-600 text-white focus:ring-1 focus:ring-twisted-neon focus:border-twisted-neon"
               placeholder="e.g., Appetizers, Main Courses, Drinks"
+              data-oid="yb-.uyy"
             />
           </div>
         </div>
 
         {/* Description */}
-        <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-300 mb-1">Description</label>
-          <div className="relative">
-             <span className="absolute top-3 left-0 flex items-center pl-3 text-gray-500">
-                <Info size={16} />
-              </span>
+        <div data-oid="g6r6.xu">
+          <label
+            htmlFor="description"
+            className="block text-sm font-medium text-gray-300 mb-1"
+            data-oid="xqq43cr"
+          >
+            Description
+          </label>
+          <div className="relative" data-oid="ttmwn_m">
+            <span
+              className="absolute top-3 left-0 flex items-center pl-3 text-gray-500"
+              data-oid="nxkch7h"
+            >
+              <Info size={16} data-oid="tnx7vy7" />
+            </span>
             <textarea
               id="description"
               rows={4}
@@ -259,27 +353,50 @@ const MenuItemForm: React.FC<MenuItemFormProps> = ({ onSuccess }) => {
               onChange={(e) => setDescription(e.target.value)}
               className="w-full pl-10 pr-3 py-2 rounded-md bg-gray-700 border border-gray-600 text-white focus:ring-1 focus:ring-twisted-neon focus:border-twisted-neon"
               placeholder="Optional: Add details about the item..."
+              data-oid="nl_pyg3"
             ></textarea>
           </div>
         </div>
 
         {/* Submit Button */}
-        <div className="mt-4">
+        <div className="mt-4" data-oid="_dwjj54">
           <button
             type="submit"
             disabled={isSubmitting || isUploading}
-            className={`w-full px-6 py-3 rounded-md font-semibold text-black transition duration-200 flex items-center justify-center ${isSubmitting || isUploading ? 'bg-gray-500 cursor-not-allowed' : 'bg-twisted-neon hover:bg-twisted-neon/80'}`}
+            className={`w-full px-6 py-3 rounded-md font-semibold text-black transition duration-200 flex items-center justify-center ${isSubmitting || isUploading ? "bg-gray-500 cursor-not-allowed" : "bg-twisted-neon hover:bg-twisted-neon/80"}`}
+            data-oid="0kiw7.-"
           >
             {isSubmitting ? (
               <>
-                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  data-oid="om0sks6"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    data-oid="a7d2mz1"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    data-oid="pt9k0tg"
+                  ></path>
                 </svg>
-                {message.text.includes('Uploading') ? 'Uploading...' : 'Submitting...'}
+                {message.text.includes("Uploading")
+                  ? "Uploading..."
+                  : "Submitting..."}
               </>
             ) : (
-              'Add Menu Item'
+              "Add Menu Item"
             )}
           </button>
         </div>

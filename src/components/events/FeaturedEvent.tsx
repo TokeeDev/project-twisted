@@ -1,181 +1,122 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
+// src/components/FeaturedEvent.tsx
+import React from 'react';
+import Image from 'next/image'; // Using Next.js Image component
 import Link from 'next/link';
-import { Calendar, Clock, MapPin, Music, Tag, Loader2, AlertTriangle } from 'lucide-react';
-import type { Event } from '@prisma/client'; // Import the Event type from Prisma
 
-// Helper function to format date
-const formatDate = (dateString: string | Date): string => {
-  return new Date(dateString).toLocaleDateString('en-US', {
-    weekday: 'long', // e.g., Friday
-    month: 'long', // e.g., July
-    day: 'numeric', // e.g., 19
-  });
+// Define expected props if you plan to pass event data dynamically
+interface FeaturedEventProps {
+  event?: { // Example structure - adapt as needed
+    title: string;
+    dateTime: string;
+    djs: string;
+    specials: string;
+    imageUrl: string;
+    instagramHandle: string;
+    instagramLink: string;
+  };
+}
+
+// Default data for placeholder - replace with actual fetched/static data
+const defaultEvent = {
+  title: 'Synthwave Saturdays',
+  dateTime: 'Every Saturday | 9 PM - 2 AM',
+  djs: 'DJ Neon & Vector Hold',
+  specials: '$5 Cyber Sunrise Cocktails',
+  imageUrl: '/path/to/your-event-poster-9x16.jpg', // *** IMPORTANT: Update this path ***
+  instagramHandle: '@TwistedCantina',
+  instagramLink: 'https://instagram.com/TwistedCantina', // *** IMPORTANT: Update this link ***
 };
 
-const FeaturedEvent: React.FC = () => {
-  const [featuredEvent, setFeaturedEvent] = useState<Event | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchFeaturedEvent = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await fetch('/api/events?featured=true');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const events: Event[] = await response.json();
-        // Assuming only one event should be featured, take the first one
-        // Or implement logic to select the *most* relevant featured event if multiple are returned
-        if (events.length > 0) {
-          setFeaturedEvent(events[0]);
-        } else {
-          setFeaturedEvent(null); // No featured event found
-        }
-      } catch (err) {
-        console.error('Failed to fetch featured event:', err);
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchFeaturedEvent();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <section className="bg-gradient-to-b from-black via-gray-900 to-black text-white py-16 md:py-24">
-        <div className="container mx-auto px-4 text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-twisted-neon mx-auto" />
-          <p className="mt-4 text-xl">Loading Featured Event...</p>
-        </div>
-      </section>
-    );
-  }
-
-  if (error) {
-    return (
-      <section className="bg-gradient-to-b from-black via-gray-900 to-black text-white py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center text-red-400 border border-red-600 bg-red-900/30 p-4 rounded-md max-w-md mx-auto">
-            <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-red-500" />
-            <p>Error loading featured event: {error}</p>
-            <p>Please try again later.</p>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (!featuredEvent) {
-    return (
-      <section className="bg-gradient-to-b from-black via-gray-900 to-black text-white py-16 md:py-24">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-twisted-neon">Upcoming Events</h2>
-          <p className="text-gray-400">No featured event scheduled right now. Check back soon!</p>
-        </div>
-      </section>
-    );
-  }
-
-  // Safely split DJs and Specials, handling null or empty strings
-  const djsList = featuredEvent.djs?.split(',').map(dj => dj.trim()).filter(dj => dj) || [];
-  const specialsList = featuredEvent.specials?.split(';').map(sp => sp.trim()).filter(sp => sp) || [];
-
+const FeaturedEvent: React.FC<FeaturedEventProps> = ({ event = defaultEvent }) => {
   return (
-    <section id="events" className="bg-gradient-to-b from-black via-gray-900 to-black text-white py-16 md:py-24">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center text-twisted-neon">Featured Event</h2>
-        {/* Explicitly set flex-col for mobile (default) and md:flex-row for desktop */}
-        <div className="bg-gray-800/50 rounded-xl shadow-lg overflow-hidden flex flex-col md:flex-row border border-gray-700">
-          {/* Event Image (Left Column on Desktop) */}
-          {/* Ensure image takes full width on mobile and half on desktop */}
-          <div className="w-full md:w-1/2 relative aspect-[9/16] md:aspect-auto">
-            {featuredEvent.imageUrl && (
+    // Section using black background to blend smoothly after the hero. Increased padding.
+    <section id="featured" className="py-20 md:py-28 px-4 bg-black text-white"> {/* Changed bg-brand-black to bg-black */}
+      <div className="container mx-auto">
+
+        {/* Centered "Featured" Title - Larger and using a neon color (match Hero's text-twisted-neon if defined) */}
+        <h2 className="text-5xl md:text-6xl lg:text-7xl font-heading text-neon-green text-center mb-16 md:mb-20"> {/* Assuming text-neon-green is defined */}
+          Featured
+        </h2>
+
+        {/* Main content container: Uses Flexbox for side-by-side layout on medium screens and up */}
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-16 lg:gap-20">
+
+          {/* Image Container (Left on Desktop) */}
+          {/* Larger width allocation (40% to 50%). Responsive max-width. order-2 ensures it's below text on mobile */}
+          <div className="w-full md:w-2/5 lg:w-[45%] order-2 md:order-1 flex justify-center md:justify-start">
+            {/* Relative container needed for Image with layout="fill" */}
+            <div className="relative w-full max-w-md lg:max-w-lg xl:max-w-xl aspect-[9/16] overflow-hidden rounded-lg shadow-2xl border-2 border-neon-green/60"> {/* Added border like Hero video */}
               <Image
-                src={featuredEvent.imageUrl} // Use dynamic image URL
-                alt={featuredEvent.title}
-                layout="fill"
-                objectFit="cover"
-                className="transition-transform duration-300 group-hover:scale-105"
+                src={event.imageUrl}
+                alt={`${event.title} Poster`}
+                layout="fill" // Fill the container
+                objectFit="cover" // Cover the area without stretching
+                className="transition-transform duration-300 ease-in-out hover:scale-105" // Optional subtle zoom on hover
+                priority // Consider adding priority if this image is often above the fold after scroll
               />
-            )}
-            <div className="absolute inset-0 bg-black bg-opacity-30 md:bg-opacity-10"></div> {/* Subtle overlay */}
-          </div>
-
-          {/* Event Details (Right Column on Desktop) */}
-          {/* Ensure details take full width on mobile and half on desktop */}
-          <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-between">
-            <div>
-              <h3 className="text-2xl md:text-3xl font-bold mb-3 text-white">{featuredEvent.title}</h3>
-              {featuredEvent.description && (
-                <p className="text-gray-300 mb-4 text-sm md:text-base">{featuredEvent.description}</p>
-              )}
-
-              <div className="space-y-3 text-sm md:text-base text-gray-300 mb-6">
-                <div className="flex items-center">
-                  <Calendar size={18} className="mr-3 text-twisted-neon flex-shrink-0" />
-                  <span>{formatDate(featuredEvent.date)}</span>
-                </div>
-                {featuredEvent.time && (
-                  <div className="flex items-center">
-                    <Clock size={18} className="mr-3 text-twisted-neon flex-shrink-0" />
-                    <span>{featuredEvent.time}</span>
-                  </div>
-                )}
-                <div className="flex items-start">
-                  <MapPin size={18} className="mr-3 mt-0.5 text-twisted-neon flex-shrink-0" />
-                  <span>1640 S Blue Island Ave, Chicago, IL 60608</span>
-                </div>
-                {djsList.length > 0 && (
-                  <div className="flex items-start">
-                    <Music size={18} className="mr-3 mt-0.5 text-twisted-neon flex-shrink-0" />
-                    <div>
-                      <span className="font-semibold text-gray-200">Music by:</span>
-                      <ul className="list-disc list-inside ml-1">
-                        {djsList.map((dj, index) => <li key={index}>{dj}</li>)}
-                      </ul>
-                    </div>
-                  </div>
-                )}
-                {(featuredEvent.happyHourTime || specialsList.length > 0) && (
-                  <div className="flex items-start pt-2 border-t border-gray-700/50 mt-3">
-                    <Tag size={18} className="mr-3 mt-0.5 text-twisted-neon flex-shrink-0" />
-                    <div>
-                      {featuredEvent.happyHourTime && (
-                        <p><span className="font-semibold text-gray-200">Happy Hour:</span> {featuredEvent.happyHourTime}</p>
-                      )}
-                      {specialsList.length > 0 && (
-                        <div className="mt-1">
-                          <span className="font-semibold text-gray-200">Specials:</span>
-                          <ul className="list-disc list-inside ml-1">
-                            {specialsList.map((special, index) => <li key={index}>{special}</li>)}
-                          </ul>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Call to Action / Link */}
-            <div className="mt-auto">
-              <Link href="/events">
-                <a className="inline-block bg-twisted-neon text-black font-semibold px-6 py-3 rounded-md hover:bg-twisted-neon/80 transition duration-200 text-center w-full md:w-auto">
-                  View All Events
-                </a>
-              </Link>
             </div>
           </div>
+
+          {/* Details Container (Right on Desktop) */}
+          {/* flex-1 takes remaining space. order-1 ensures it's above image on mobile. Increased padding for gap. */}
+          <div className="flex-1 order-1 md:order-2 text-center md:text-left md:pl-4 lg:pl-6">
+            {/* Event Title - Significantly larger */}
+            <h3 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white mb-5 md:mb-6">
+              {event.title}
+            </h3>
+            {/* Event Details - Larger font sizes */}
+            <p className="text-xl md:text-2xl lg:text-3xl text-gray-300 font-body mb-4 md:mb-5">
+              {event.dateTime}
+            </p>
+            <p className="text-lg md:text-xl lg:text-2xl text-gray-400 font-body mb-4 md:mb-5">
+              DJs: {event.djs}
+            </p>
+            <p className="text-lg md:text-xl lg:text-2xl text-gray-400 font-body mb-6 md:mb-8">
+              Specials: {event.specials}
+            </p>
+            {/* Instagram Link - Larger and styled */}
+            <Link
+              href={event.instagramLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block text-neon-green text-lg md:text-xl lg:text-2xl font-body hover:underline hover:animate-buzz transition-all duration-150" // Assuming animate-buzz is defined
+            >
+              {event.instagramHandle}
+            </Link>
+          </div>
+
         </div>
       </div>
+       {/* Ensure necessary styles are defined in tailwind.config or globals.css */}
+      {/* Example style block if needed, but prefer defining in config/globals */}
+      <style jsx global>{`
+        .text-neon-green { color: #2CFF05; } /* Match this to your theme */
+        .border-neon-green\\/60 { border-color: rgba(44, 255, 5, 0.6); }
+        .font-heading { font-family: /* Your heading font */; } /* E.g., 'PixelFontName1', sans-serif */
+        .font-body { font-family: /* Your body font */; } /* E.g., 'PixelFontName2', sans-serif */
+
+        /* Ensure 'animate-buzz' corresponds to a keyframe animation in tailwind.config.js */
+        /* Example (should be in tailwind.config.js ideally):
+        theme: {
+          extend: {
+            keyframes: {
+              buzz: {
+                '0%, 100%': { transform: 'translate(0, 0)' },
+                '25%': { transform: 'translate(-1px, 1px)' },
+                '50%': { transform: 'translate(1px, -1px)' },
+                '75%': { transform: 'translate(1px, 1px)' },
+              },
+            },
+            animation: {
+              buzz: 'buzz 0.1s infinite linear',
+            },
+          },
+        },
+        */
+       .hover\\:animate-buzz:hover {
+         animation: buzz 0.1s infinite linear; /* Direct application if needed */
+       }
+      `}</style>
     </section>
   );
 };

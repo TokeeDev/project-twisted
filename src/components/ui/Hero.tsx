@@ -1,6 +1,7 @@
 'use client'; 
  
  import { useRef, useEffect, useState } from 'react'; 
+ import Button from './Button'; // Import the new Button component 
  
  const Hero = () => { 
    const heroRef = useRef<HTMLDivElement>(null); 
@@ -74,27 +75,27 @@
            </p> 
            {/* Buttons - Hide on mobile, show on desktop */}
            <div className="hidden md:flex flex-col sm:flex-row justify-center md:justify-start gap-6 mt-8"> {/* Hide on mobile (default), show on md and up */}
-             <button 
-               className="px-6 py-3 rounded-lg bg-twisted-neon text-black font-bold text-lg shadow-lg hover:bg-twisted-neon/80 transition-colors focus:outline-none focus:ring-2 focus:ring-twisted-neon" 
+             <Button 
+               variant="primary"
                onClick={() => { /* Add scroll logic if needed */ }} 
              > 
                Specials 
-             </button> 
-             <button 
-               className="px-6 py-3 rounded-lg bg-twisted-neon text-black font-bold text-lg shadow-lg hover:bg-twisted-neon/80 transition-colors focus:outline-none focus:ring-2 focus:ring-twisted-neon" 
+             </Button> 
+             <Button 
+               variant="primary"
                onClick={() => { /* Add scroll logic if needed */ }} 
              > 
                Events 
-             </button> 
+             </Button> 
            </div> 
            {/* Mobile Only Button - Show on mobile, hide on desktop */}
            <div className="flex justify-center mt-8 md:hidden"> {/* Show only on mobile */}
-             <button
-               className="px-6 py-3 rounded-lg bg-twisted-neon text-black font-bold text-lg shadow-lg hover:bg-twisted-neon/80 transition-colors focus:outline-none focus:ring-2 focus:ring-twisted-neon"
+             <Button
+               variant="primary"
                onClick={() => setShowVideoModal(true)} // Trigger the modal
              >
                Preview Your Night
-             </button>
+             </Button>
            </div>
          </div> 
 

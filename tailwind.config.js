@@ -9,6 +9,9 @@ module.exports = {
   theme: {
   	extend: {
   		colors: {
+			'neon-green': '#2CFF05', // Our primary accent color (from example)
+			'brand-black': '#000000', // Base black (from example)
+			'brand-white': '#FFFFFF', // Base white (from example)
   			'twisted-black': '#121212',
   			'twisted-darker': '#0a0a0a',
   			'twisted-white': '#f5f5f5',
@@ -56,6 +59,9 @@ module.exports = {
   			}
   		},
   		fontFamily: {
+        // Replace with actual font names after importing/configuring them
+        heading: ['PixelFontName1', 'sans-serif'], // (from example)
+        body: ['PixelFontName2', 'sans-serif'], // (from example)
   			sans: [
   				'Inter',
   				'system-ui',
@@ -72,15 +78,47 @@ module.exports = {
   				'monospace'
   			]
   		},
+      backgroundImage: {
+        // Define the hero background image (from example)
+        'hero-pattern': "url('/path/to/noisy-bw-bar.jpg')",
+      },
+      aspectRatio: {
+        '9/16': '9 / 16', // For the featured event poster (from example)
+      },
+      keyframes: {
+        // Simple buzz effect for hover states (from example)
+        buzz: {
+          '0%, 100%': { transform: 'translate(0, 0)' },
+          '25%': { transform: 'translate(-1px, 1px)' },
+          '50%': { transform: 'translate(1px, -1px)' },
+          '75%': { transform: 'translate(1px, 1px)' },
+        },
+        // Subtle text distortion effect (from example)
+        'vhs-text': {
+          '0%, 100%': {
+            textShadow: '1px 1px 0px rgba(0, 255, 255, 0.5), -1px -1px 0px rgba(255, 0, 255, 0.5)',
+          },
+          '50%': {
+            textShadow: '-1px 1px 0px rgba(0, 255, 255, 0.5), 1px -1px 0px rgba(255, 0, 255, 0.5)',
+          },
+        },
+      },
   		animation: {
+        buzz: 'buzz 0.1s infinite linear', // (from example)
+        'vhs-text': 'vhs-text 0.2s infinite linear', // (from example)
   			'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
   			float: 'float 6s ease-in-out infinite'
   		},
+      boxShadow: {
+        // Custom neon glow effect (from example)
+        'neon-glow': '0 0 5px theme(colors.neon-green), 0 0 15px theme(colors.neon-green), 0 0 25px theme(colors.neon-green)',
+      },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		}
+		
   	}
   },
   plugins: [require("tailwindcss-animate")],

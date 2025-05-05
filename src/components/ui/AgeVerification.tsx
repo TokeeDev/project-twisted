@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Button from './Button'; // Import the new Button component
 
 interface AgeVerificationProps {
   onVerify: () => void;
@@ -31,19 +32,20 @@ const AgeVerification = ({ onVerify }: AgeVerificationProps) => {
         </p>
         
         <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-          <button 
+          <Button 
+            variant="primary"
             onClick={handleVerify}
-            className="cyber-button px-6 py-3 font-bold"
           >
             I am 21 or older
-          </button>
+          </Button>
           
-          <button 
+          <Button 
+            variant="secondary"
             onClick={handleDecline}
-            className="border border-white px-6 py-3 font-bold hover:bg-white/10 transition"
+            className="border-white hover:bg-white/10" // Keep existing border/hover if needed, or adjust Button component
           >
             I am under 21
-          </button>
+          </Button>
         </div>
         
         {error && (

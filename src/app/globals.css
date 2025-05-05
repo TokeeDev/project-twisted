@@ -10,18 +10,36 @@
   --twisted-violet: #9933ff;
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: var(--twisted-black);
-  color: var(--twisted-neon);
-  position: relative;
-  overflow-x: hidden;
-}
+
+ @font-face { 
+   font-family: 'PixelFontName1'; 
+   src: url('/fonts/PixelFont1.woff2') format('woff2'); 
+   font-weight: normal; 
+   font-style: normal; 
+ } 
+ @font-face { 
+   font-family: 'PixelFontName2'; 
+   src: url('/fonts/PixelFont2.woff2') format('woff2'); 
+   font-weight: normal; 
+   font-style: normal; 
+ } 
+ 
+ 
+ body { 
+   @apply bg-brand-black text-brand-white font-body; 
+ } 
+ 
+ /* Apply heading font globally or via components */ 
+ h1, h2, h3 { 
+   @apply font-heading; 
+ } 
+ 
+ /* You might add more complex base styles or overrides here */
 
 
 
 
-/* Age Verification */
+\n/* Age Verification */
 .age-badge-lg {
   display: inline-flex;
   align-items: center;

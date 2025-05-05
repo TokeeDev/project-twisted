@@ -47,15 +47,15 @@ export function MenuNavigation({ sections }: MenuNavigationProps) {
   return (
     <div
       className="bg-twisted-darker rounded-lg shadow-[0_0_15px_rgba(153,51,255,0.2)] p-4"
-      data-oid="x4si1so"
+      data-oid="x9.eyvv"
     >
       <h2
         className="text-xl font-semibold mb-4 text-twisted-neon"
-        data-oid="w5bww2:"
+        data-oid="x4.kvsa"
       >
         Menu
       </h2>
-      <nav className="flex flex-col space-y-2" data-oid="hqk9ot3">
+      <nav className="flex flex-col space-y-2" data-oid="l.wsz7p">
         {sections.map((section) => {
           const id = section.toLowerCase().replace(/[^\w]+/g, "-");
           return (
@@ -67,7 +67,7 @@ export function MenuNavigation({ sections }: MenuNavigationProps) {
                   "bg-twisted-violet/30 text-twisted-neon font-medium",
               )}
               onClick={() => scrollToSection(id)}
-              data-oid=":fvb7bp"
+              data-oid="2qq532d"
             >
               {section}
             </button>

@@ -118,24 +118,24 @@ export default function MenuPage() {
   return (
     <div
       className="min-h-screen bg-black text-white font-sans"
-      data-oid=".1enzei"
+      data-oid="lr.8c_:"
     >
-      <MenuHero data-oid="7m1:0i:" />
+      <MenuHero data-oid="3t.1vp." />
 
       <div
         className="container mx-auto px-4 sm:px-6 py-16 md:py-24"
-        data-oid="57o5wbh"
+        data-oid="8..-rp-"
       >
         {/* Search and Navigation Section - Centered Layout */}
         {!isLoading && !error && Object.keys(categorizedMenu).length > 0 && (
           <div
             className="mb-12 flex flex-col items-center gap-6"
-            data-oid="i4fxqfb"
+            data-oid="84mzueu"
           >
             {" "}
             {/* Centered column layout with gap */}
             {/* Search Input - Centered */}
-            <div className="relative w-full max-w-md" data-oid="2euzd9-">
+            <div className="relative w-full max-w-md" data-oid="fnmqo7:">
               {" "}
               {/* Control max width */}
               <Input
@@ -144,30 +144,30 @@ export default function MenuPage() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 bg-black border-2 border-gray-700 text-white placeholder:text-gray-500 focus:border-twisted-neon focus:ring-1 focus:ring-twisted-neon rounded-lg shadow-md focus:shadow-lg focus:shadow-twisted-neon/30 transition-all duration-300"
-                data-oid="jljjjoj"
+                data-oid="-8.a-of"
               />
               <Search
                 className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500 peer-focus:text-twisted-neon transition-colors duration-300"
-                data-oid="nrl.ky5"
+                data-oid="p8t3v5a"
               />
             </div>
             {/* Category Dropdown - Centered Below Search */}
-            <div className="w-full max-w-xs" data-oid=".7hub0x">
+            <div className="w-full max-w-xs" data-oid="2t2toso">
               {" "}
               {/* Control max width */}
-              <Select onValueChange={handleCategoryChange} data-oid="g8oe_u4">
+              <Select onValueChange={handleCategoryChange} data-oid="-j5jtfl">
                 <SelectTrigger
                   className="w-full bg-black border-2 border-gray-700 text-white focus:border-twisted-neon focus:ring-1 focus:ring-twisted-neon rounded-lg shadow-md data-[state=open]:shadow-lg data-[state=open]:shadow-twisted-neon/30 transition-all duration-300"
-                  data-oid="4r:3b3_"
+                  data-oid="lyjm6uo"
                 >
                   <SelectValue
                     placeholder="Go to section..."
-                    data-oid="wlivao_"
+                    data-oid="588cgkb"
                   />
                 </SelectTrigger>
                 <SelectContent
                   className="bg-black border-2 border-gray-700 text-white rounded-lg shadow-xl"
-                  data-oid="luhq832"
+                  data-oid="b2yn1m2"
                 >
                   {menuCategories.map((category) => {
                     const categoryId = category
@@ -178,7 +178,7 @@ export default function MenuPage() {
                         key={categoryId}
                         value={categoryId}
                         className="cursor-pointer hover:bg-twisted-neon/20 focus:bg-twisted-neon/30 data-[state=checked]:bg-twisted-neon/40 data-[state=checked]:text-twisted-neon transition-colors duration-200"
-                        data-oid="pmeidhx"
+                        data-oid="6uv3gw0"
                       >
                         {category}
                       </SelectItem>
@@ -191,32 +191,32 @@ export default function MenuPage() {
         )}
 
         {/* Menu Sections */}
-        <div className="space-y-12 md:space-y-16" data-oid="3g9z-mb">
+        <div className="space-y-12 md:space-y-16" data-oid="nz.p1-l">
           {isLoading ? (
             <div
               className="flex justify-center items-center h-64"
-              data-oid=".9quh.2"
+              data-oid="vw5lylr"
             >
               <Loader2
                 className="h-12 w-12 animate-spin text-twisted-neon"
-                data-oid="_3:kpaw"
+                data-oid="7---idu"
               />
 
-              <p className="ml-4 text-xl" data-oid="mtc-dfe">
+              <p className="ml-4 text-xl" data-oid="l_.-d-q">
                 Loading Menu...
               </p>
             </div>
           ) : error ? (
             <div
               className="text-center text-red-400 border border-red-600 bg-red-900/30 p-4 rounded-md"
-              data-oid="wlbvx6q"
+              data-oid="9pux2qd"
             >
-              <p data-oid="7ako-3m">Error loading menu: {error}</p>
-              <p data-oid="dez7.b-">Please try refreshing the page.</p>
+              <p data-oid="vjsn7u_">Error loading menu: {error}</p>
+              <p data-oid="dv0cbsi">Please try refreshing the page.</p>
             </div>
           ) : Object.keys(filteredMenu).length === 0 ? (
-            <div className="text-center text-gray-400" data-oid="k.9wv.u">
-              <p data-oid="xckwl_:">
+            <div className="text-center text-gray-400" data-oid="-m4um7p">
+              <p data-oid="x0338j8">
                 {searchTerm
                   ? `No items match "${searchTerm}".`
                   : "No menu items available at the moment."}
@@ -230,7 +230,7 @@ export default function MenuPage() {
                 title={category}
                 items={items}
                 onItemClick={handleOpenModal}
-                data-oid="uk5q4w9"
+                data-oid="9040ld."
               />
             ))
           )}
@@ -241,7 +241,7 @@ export default function MenuPage() {
         item={selectedItem}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        data-oid="8qnf5dn"
+        data-oid="0vj3wsd"
       />
     </div>
   );

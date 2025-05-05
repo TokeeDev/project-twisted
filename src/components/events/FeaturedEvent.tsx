@@ -1,80 +1,100 @@
 // src/components/events/FeaturedEvent.tsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Instagram } from "lucide-react";
 
-// Define expected props for event data
-interface FeaturedEventProps {
-  event?: {
-    title: string;
-    dateTime: string;
-    djs: string;
-    specials: string;
-    imageUrl: string;
-    instagramHandle: string;
-    instagramLink: string;
-  };
+// Define expected props for event data to match your database schema
+interface EventType {
+  id: string;
+  title: string;
+  date: string;
+  time: string;
+  imageUrl: string;
+  djs: string | null;
+  specials: string | null;
+  featured: boolean;
 }
 
-// Default event data
-const defaultEvent = {
-  title: "Synthwave Saturdays",
-  dateTime: "Every Saturday | 9 PM - 2 AM",
-  djs: "DJ Neon & Vector Hold",
-  specials: "$5 Cyber Sunrise Cocktails",
-  imageUrl: "/images/events/synthwave-poster.jpg", // Update with your actual image path
-  instagramHandle: "@twistedcantina",
-  instagramLink: "https://instagram.com/twistedcantina", // Update with your actual Instagram link
+interface FeaturedEventProps {
+  preloadedEvent?: EventType;
+}
+
+const defaultInstagram = {
+  handle: "@twistedcantina",
+  link: "https://instagram.com/twistedcantina",
 };
 
-const FeaturedEvent: React.FC<FeaturedEventProps> = ({
-  event = defaultEvent,
-}) => {
+const FeaturedEvent: React.FC<FeaturedEventProps> = ({ preloadedEvent }) => {
+  const [event, setEvent] = useState<EventType | null>(preloadedEvent || null);
+  const [loading, setLoading] = useState(!preloadedEvent);
+
+  useEffect(() => {
+    // If no preloaded event, fetch the featured event
+    if (!preloadedEvent) {
+      const fetchFeaturedEvent = async () => {
+        try {
+          const response = await fetch("/api/events/featured");
+          if (response.ok) {
+            const data = await response.json();
+            setEvent(data);
+          }
+        } catch (error) {
+          console.error("Error fetching featured event:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchFeaturedEvent();
+    }
+  }, [preloadedEvent]);
+
+  if (loading) {
+    return (
+      <div className="py-16 text-center text-white" data-oid="y:7cvn6">
+        Loading featured event...
+      </div>
+    );
+  }
+
+  if (!event) {
+    return null; // Or show a placeholder/default state
+  }
+
+  // Format the date
+  const eventDate = new Date(event.date);
+  const formattedDate = eventDate.toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
+
   return (
     <section
       className="py-16 md:py-1 px-4 bg-twisted-darker text-white"
-      data-oid="tak3wdf"
+      data-oid="vom:r2s"
     >
-      <div className="container mx-auto" data-oid="757tg73">
-        {/* Featured heading with neon green styling */}
-
-        {/* Main content container */}
-
-        <h2
-          className="text-5xl md:text-6xl font-bold text-twisted-neon text-right mb-12 md:mb-16"
-          data-oid="gvmknj3"
-          key="olk-ICVP"
-        >
-          Featured
-        </h2>
+      <div className="container mx-auto" data-oid="x7sx-1v">
         <div
           className="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-16"
-          data-oid="knppah6"
+          data-oid="r3m122t"
         >
           {/* Phone-shaped image container - Left side */}
           <div
-            className="w-full md:w-1/2 lg:w-2/5 flex justify-center"
-            data-oid="::how4b"
+            className="w-full md:w-1/2 lg:w-2/5 flex justify-center rounded-[1px] mt-[50px] mb-[50px]"
+            data-oid="1ig:2s6"
           >
             <div
               className="relative w-full max-w-[280px] aspect-[9/16] rounded-[32px] border-2 border-twisted-neon overflow-hidden"
-              data-oid="p-3n4t0"
+              data-oid="t92xvbn"
             >
               {/* Time display overlay */}
               <div
                 className="absolute top-6 left-0 right-0 z-10 text-center text-white text-xl font-medium"
-                data-oid="vakanm."
+                data-oid=".4pyhgr"
               >
                 9:16
-              </div>
-
-              {/* Image placeholder text - will be replaced by actual image */}
-              <div
-                className="absolute inset-0 flex items-center justify-center text-white/70 text-lg"
-                data-oid="f53g05w"
-              >
-                image
               </div>
 
               <Image
@@ -82,63 +102,73 @@ const FeaturedEvent: React.FC<FeaturedEventProps> = ({
                 alt={`${event.title} Event`}
                 fill
                 sizes="(max-width: 768px) 80vw, (max-width: 1200px) 40vw, 33vw"
-                className="object-cover"
+                className="object-cover fixed top-auto right-auto bottom-auto left-auto flex mt-[5px]"
                 priority
-                data-oid="grv1s1j"
+                data-oid=":2m82nh"
               />
             </div>
           </div>
 
           {/* Event details - Right side */}
           <div
-            className="w-full md:w-1/2 lg:w-3/5 space-y-4 md:space-y-6 normal-case"
-            data-oid="ivwz-i2"
+            className="w-full md:w-1/2 lg:w-3/5 space-y-4 md:space-y-6 normal-case flex justify-start flex-col items-center"
+            data-oid="d-u34j1"
           >
             {/* Title */}
             <h3
               className="text-3xl md:text-4xl font-bold text-twisted-neon"
-              data-oid="tvx_ygx"
+              data-oid="i6vujmp"
             >
               {event.title}
             </h3>
 
             {/* Date and Time */}
-            <p className="text-xl md:text-2xl text-white" data-oid="fdsq-dx">
-              {event.dateTime}
+            <p className="text-xl md:text-2xl text-white" data-oid="auxq5pk">
+              {formattedDate} | {event.time}
             </p>
 
             {/* DJs */}
-            <p className="text-lg md:text-xl text-white/80" data-oid="atdvcat">
-              {event.djs}
-            </p>
+            {event.djs && (
+              <p
+                className="text-lg md:text-xl text-white/80"
+                data-oid="2596xp4"
+              >
+                {event.djs}
+              </p>
+            )}
 
             {/* Specials */}
-            <p className="text-lg md:text-xl text-white/80" data-oid="c3ey93i">
-              {event.specials}
-            </p>
+            {event.specials && (
+              <p
+                className="text-lg md:text-xl text-white/80"
+                data-oid="2427npn"
+              >
+                {event.specials}
+              </p>
+            )}
 
             {/* View Event button */}
-            <div className="pt-4" data-oid="dfm:-w.">
+            <div className="pt-4" data-oid="c:.7e8k">
               <Link
                 href="/events"
                 className="inline-block px-6 py-3 border-2 border-twisted-neon text-twisted-neon font-medium rounded-md hover:bg-twisted-neon/10 transition-colors"
-                data-oid="p9g8i_j"
+                data-oid="zowx0nh"
               >
                 View Event
               </Link>
             </div>
 
             {/* Instagram handle */}
-            <div className="pt-2" data-oid="wpxx97_">
+            <div className="pt-2" data-oid=".jjhg0v">
               <Link
-                href={event.instagramLink}
+                href={defaultInstagram.link}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 text-white hover:text-twisted-neon transition-colors"
-                data-oid="jnt.rwk"
+                data-oid="4x4v3ws"
               >
-                <Instagram size={20} data-oid="3fmtipk" />
-                <span data-oid="ifp7ym9">{event.instagramHandle}</span>
+                <Instagram size={20} data-oid="5eu39xz" />
+                <span data-oid="tzcymtd">{defaultInstagram.handle}</span>
               </Link>
             </div>
           </div>
@@ -147,4 +177,5 @@ const FeaturedEvent: React.FC<FeaturedEventProps> = ({
     </section>
   );
 };
+
 export default FeaturedEvent;

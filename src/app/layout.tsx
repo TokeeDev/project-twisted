@@ -10,26 +10,26 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-oid="pehwgr3">
-      <head data-oid="62.c_:a">
+    <html lang="en" data-oid="h3w04kc">
+      <head data-oid="vxdstsb">
         <link
           rel="preconnect"
           href="https://fonts.googleapis.com"
-          data-oid="e8qa.dd"
+          data-oid="m_xa0cy"
         />
 
         <link
           rel="preconnect"
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
-          data-oid="0ydxpyp"
+          data-oid="dpnn3tv"
         />
       </head>
       <body
         className="top-auto right-auto bottom-auto left-auto sticky"
-        data-oid="35qx.dn"
+        data-oid="7ehihav"
       >
-        <Navbar data-oid="fldiqt9" />
+        <Navbar data-oid="_tvvy28" />
         {children}
       </body>
     </html>

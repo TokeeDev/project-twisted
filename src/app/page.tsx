@@ -31,15 +31,15 @@ export default function Home() {
     <>
       <div
         className={`relative min-h-screen bg-black text-white font-sans ${!verifiedAge ? "blur-md filter brightness-50" : ""}`}
-        data-oid="ea5fwdy"
+        data-oid="8xglbda"
       >
-        <Hero data-oid="czb9qoo" />
-        <FeaturedEvent data-oid="5bx_c5k" />
-        <FeaturedMenu data-oid="8ku-.r8" />
-        <Footer data-oid="j2m4d-j" />
+        <Hero data-oid="twwsqok" />
+        <FeaturedEvent data-oid="9.8zq-b" />
+        <FeaturedMenu data-oid="e1lric:" />
+        <Footer data-oid="_:k9y4x" />
       </div>
       {!verifiedAge && (
-        <AgeVerification onVerify={handleVerifyAge} data-oid="_tyb-vw" />
+        <AgeVerification onVerify={handleVerifyAge} data-oid="mq7hlej" />
       )}
     </>
   );

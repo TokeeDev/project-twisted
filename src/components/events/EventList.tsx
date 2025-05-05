@@ -21,34 +21,34 @@ const EventCard: React.FC<{ event: PrismaEvent }> = ({ event }) => {
   return (
     <div
       className="bg-gray-800/50 border border-gray-700 rounded-lg overflow-hidden shadow-lg hover:shadow-twisted-neon/30 transition-shadow duration-300 flex flex-col"
-      data-oid="vm4-aez"
+      data-oid="v-do5x7"
     >
       {event.imageUrl && (
         <img
           src={event.imageUrl}
           alt={event.title}
           className="w-full h-48 object-cover"
-          data-oid="3nkur3t"
+          data-oid="izt.j9o"
         />
       )}
-      <div className="p-6 flex flex-col flex-grow" data-oid="z.g1mcl">
+      <div className="p-6 flex flex-col flex-grow" data-oid="lb6lras">
         <h2
           className="text-2xl font-semibold text-twisted-neon mb-2"
-          data-oid="tnby:pb"
+          data-oid="3wl6oip"
         >
           {event.title}
         </h2>
         <div
           className="text-sm text-gray-400 mb-3 space-y-1"
-          data-oid="q-j9i6j"
+          data-oid="9lglq9a"
         >
-          <p className="flex items-center" data-oid="g82r67c">
-            <Calendar size={14} className="mr-2" data-oid="worlaa6" />{" "}
+          <p className="flex items-center" data-oid="wa.zts-">
+            <Calendar size={14} className="mr-2" data-oid="jotb4qi" />{" "}
             {formatDate(event.date)}
           </p>
           {event.time && (
-            <p className="flex items-center" data-oid="mz:rfwe">
-              <Clock size={14} className="mr-2" data-oid="kyg9349" />{" "}
+            <p className="flex items-center" data-oid="10:o825">
+              <Clock size={14} className="mr-2" data-oid="1m38vxr" />{" "}
               {event.time}
             </p>
           )}
@@ -56,16 +56,16 @@ const EventCard: React.FC<{ event: PrismaEvent }> = ({ event }) => {
         {event.description && (
           <p
             className="text-gray-300 mb-4 text-sm flex-grow line-clamp-3"
-            data-oid="ktqg0tb"
+            data-oid=".fhihnl"
           >
             {event.description}
           </p>
         )}
         <p
           className="text-xs text-gray-500 flex items-center mt-auto pt-4 border-t border-gray-700/50"
-          data-oid="fp9-:89"
+          data-oid="g:hop.-"
         >
-          <MapPin size={14} className="mr-1" data-oid="q_3_f7j" />
+          <MapPin size={14} className="mr-1" data-oid="vz45odv" />
           1640 S Blue Island Ave, Chicago, IL 60608{" "}
           {/* Assuming fixed location */}
         </p>
@@ -130,9 +130,9 @@ const EventList: React.FC<EventListProps> = ({ filter }) => {
     return (
       <div
         className="flex justify-center items-center p-8 text-twisted-neon"
-        data-oid="u9fqt59"
+        data-oid="t9i5-3o"
       >
-        <Loader2 className="h-6 w-6 mr-2 animate-spin" data-oid="j_x:5sl" />
+        <Loader2 className="h-6 w-6 mr-2 animate-spin" data-oid="cj9ikcg" />
         Loading events...
       </div>
     );
@@ -142,9 +142,9 @@ const EventList: React.FC<EventListProps> = ({ filter }) => {
     return (
       <div
         className="flex justify-center items-center p-8 text-red-400 bg-red-900/20 border border-red-600 rounded-md"
-        data-oid=".t2rjt1"
+        data-oid="xui5ci3"
       >
-        <Info size={18} className="mr-2" data-oid="1epye08" />
+        <Info size={18} className="mr-2" data-oid="wq8v9r." />
         Error loading events: {error}
       </div>
     );
@@ -154,7 +154,7 @@ const EventList: React.FC<EventListProps> = ({ filter }) => {
     return (
       <div
         className="text-center text-gray-400 p-8 bg-gray-800/30 rounded-md border border-gray-700"
-        data-oid="jr74tlv"
+        data-oid="jao9uhh"
       >
         No {filter || ""} events found. Check back soon!
       </div>
@@ -164,10 +164,10 @@ const EventList: React.FC<EventListProps> = ({ filter }) => {
   return (
     <div
       className="grid gap-8 md:grid-cols-2 lg:grid-cols-3"
-      data-oid="sjccz9s"
+      data-oid="xym8ep-"
     >
       {events.map((event) => (
-        <EventCard key={event.id} event={event} data-oid=":0e5o96" />
+        <EventCard key={event.id} event={event} data-oid="hahe_ya" />
       ))}
     </div>
   );

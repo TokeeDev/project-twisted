@@ -44,7 +44,6 @@ export function FadeIn({
       variants={fadeIn}
       transition={{ duration: 0.5, delay }}
       {...props}
-      data-oid="nhrw_ex"
     >
       {children}
     </motion.div>
@@ -63,7 +62,6 @@ export function SlideUp({
       variants={slideUp}
       transition={{ duration: 0.5, delay }}
       {...props}
-      data-oid="87lfaia"
     >
       {children}
     </motion.div>
@@ -82,7 +80,6 @@ export function StaggerContainer({
       variants={staggerChildren}
       transition={{ duration: 0.5, delay }}
       {...props}
-      data-oid="n.h130g"
     >
       {children}
     </motion.div>

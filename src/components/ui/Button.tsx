@@ -28,7 +28,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       className={`${baseStyles} ${variantStyles} ${className || ""}`}
       {...props}
-      data-oid="rv7gy6q"
+      data-oid="urj8n8e"
     >
       {children}
     </button>

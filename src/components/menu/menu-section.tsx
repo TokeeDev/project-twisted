@@ -20,7 +20,7 @@ export function MenuSection({
 }: MenuSectionProps) {
   // Destructure the new prop
   return (
-    <section id={id} className="py-12 scroll-mt-24" data-oid="upgcwz-">
+    <section id={id} className="py-12 scroll-mt-24" data-oid="k487n3-">
       {/* Apply bold, uppercase, slightly skewed style to category titles */}
       <h2
         className="text-4xl md:text-5xl font-black mb-8 uppercase tracking-tighter text-white"
@@ -30,16 +30,16 @@ export function MenuSection({
           transform: "skewX(-8deg)",
           letterSpacing: "-0.03em",
         }}
-        data-oid="cy739sq"
+        data-oid="w0b_4og"
       >
         {title}
       </h2>
       {/* Use a simple white separator */}
-      <Separator className="mb-10 bg-white/50 h-[2px]" data-oid="3o6y1nu" />
+      <Separator className="mb-10 bg-white/50 h-[2px]" data-oid="igc:_d9" />
       {/* Adjust grid layout and gap */}
       <div
         className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3"
-        data-oid="8-0en27"
+        data-oid="p5lj.qq"
       >
         {items.map((item, index) => (
           <MenuItem
@@ -48,7 +48,7 @@ export function MenuSection({
             index={index}
             // Pass the actual handler from props
             onClick={() => onItemClick(item)}
-            data-oid="t0sw_xu"
+            data-oid="nn.fcwa"
           />
         ))}
       </div>
@@ -78,28 +78,28 @@ function MenuItem({
                  hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]"
       onClick={onClick} // Attach the onClick handler
       style={{ transform: "skewX(-3deg)" }} // Apply slight skew to the card
-      data-oid="7bq5ujx"
+      data-oid="o3_zjzx"
     >
       {/* Optional: Add image placeholder if needed for modal later */}
       {/* <img src={item.imageUrl || '/placeholder.png'} alt={item.name} className="w-full h-32 object-cover opacity-80 group-hover:opacity-100 transition-opacity" /> */}
 
-      <div className="p-4" data-oid="7m:n7oh">
+      <div className="p-4" data-oid="ibsotjb">
         <div
           className="flex justify-between items-baseline mb-2"
-          data-oid="04vyua-"
+          data-oid="v2cifu4"
         >
           {/* Bold, slightly larger item name */}
           <h3
             className="text-xl font-bold uppercase tracking-tight text-white group-hover:text-white transition-colors"
             style={{ fontFamily: '"Arial Black", sans-serif' }}
-            data-oid="df30dlo"
+            data-oid="w::m-c5"
           >
             {item.name}
           </h3>
           {/* Simple white price */}
           <span
             className="font-mono font-semibold text-lg text-white ml-3"
-            data-oid="l72:x:."
+            data-oid="f_en3d0"
           >
             {item.price}
           </span>
@@ -107,7 +107,7 @@ function MenuItem({
         {item.description && (
           <p
             className="text-gray-400 mt-2 text-sm font-mono group-hover:text-gray-200 transition-colors"
-            data-oid="qv_hy.:"
+            data-oid="kt0ud_t"
           >
             {/* Keep description concise for the card view */}
             {item.description.length > 80

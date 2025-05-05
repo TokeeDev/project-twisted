@@ -40,43 +40,43 @@ const menuItems = [
 
 const FeaturedMenu = () => {
   return (
-    <section id="menu" className="py-20 bg-black text-white" data-oid="kbz4-gi">
-      <div className="container mx-auto px-4" data-oid="na-bfgh">
+    <section id="menu" className="py-20 bg-black text-white" data-oid="pp:3dtx">
+      <div className="container mx-auto px-4" data-oid="dtswvyt">
         <h2
           className="text-4xl md:text-5xl font-bold mb-10 text-center glitch-text"
-          data-oid=".:rp7bt"
+          data-oid="tfruayk"
         >
           Our Menu
         </h2>
-        <div className="grid md:grid-cols-4 gap-8" data-oid="ma-ze.g">
+        <div className="grid md:grid-cols-4 gap-8" data-oid="6-5y1az">
           {menuItems.map((item) => (
             <div
               key={item.name}
               className="bg-twisted-black/80 rounded-lg p-6 shadow-lg hover:shadow-twisted-neon/40 transition-shadow border border-twisted-neon/30"
-              data-oid="f:665y:"
+              data-oid="k9jz1ey"
             >
               <h3
                 className="text-2xl font-bold mb-2 cyber-text text-twisted-neon"
-                data-oid="3p1wdat"
+                data-oid="bzm:ev5"
               >
                 {item.name}
               </h3>
-              <p className="text-base mb-4" data-oid="r_wxqmr">
+              <p className="text-base mb-4" data-oid="ajau2z9">
                 {item.description}
               </p>
               <button
                 className="cyber-button-sm px-4 py-2 font-bold text-sm mt-2"
-                data-oid="jngft2c"
+                data-oid="pand469"
               >
                 See More
               </button>
             </div>
           ))}
         </div>
-        <div className="mt-12 text-center" data-oid="dq2xk91">
+        <div className="mt-12 text-center" data-oid="4kmc0nw">
           <button
             className="cyber-button px-8 py-3 font-bold"
-            data-oid="2v8dli3"
+            data-oid="1p-o7zp"
           >
             View Full Menu
           </button>

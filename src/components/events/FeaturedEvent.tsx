@@ -1,179 +1,122 @@
-// src/components/events/FeaturedEvent.tsx
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { Instagram } from "lucide-react";
+// src/components/FeaturedEvent.tsx
+import React from 'react';
+import Image from 'next/image'; // Using Next.js Image component
+import Link from 'next/link';
 
-// Define expected props for event data to match your database schema
-interface EventType {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  imageUrl: string;
-  djs: string | null;
-  specials: string | null;
-  featured: boolean;
-}
-
+// Define expected props if you plan to pass event data dynamically
 interface FeaturedEventProps {
-  preloadedEvent?: EventType;
+  event?: { // Example structure - adapt as needed
+    title: string;
+    dateTime: string;
+    djs: string;
+    specials: string;
+    imageUrl: string;
+    instagramHandle: string;
+    instagramLink: string;
+  };
 }
 
-const defaultInstagram = {
-  handle: "@twistedcantina",
-  link: "https://instagram.com/twistedcantina",
+// Default data for placeholder - replace with actual fetched/static data
+const defaultEvent = {
+  title: 'Synthwave Saturdays',
+  dateTime: 'Every Saturday | 9 PM - 2 AM',
+  djs: 'DJ Neon & Vector Hold',
+  specials: '$5 Cyber Sunrise Cocktails',
+  imageUrl: '/path/to/your-event-poster-9x16.jpg', // *** IMPORTANT: Update this path ***
+  instagramHandle: '@TwistedCantina',
+  instagramLink: 'https://instagram.com/TwistedCantina', // *** IMPORTANT: Update this link ***
 };
 
-const FeaturedEvent: React.FC<FeaturedEventProps> = ({ preloadedEvent }) => {
-  const [event, setEvent] = useState<EventType | null>(preloadedEvent || null);
-  const [loading, setLoading] = useState(!preloadedEvent);
-
-  useEffect(() => {
-    // If no preloaded event, fetch the featured event
-    if (!preloadedEvent) {
-      const fetchFeaturedEvent = async () => {
-        try {
-          const response = await fetch("/api/events/featured");
-          if (response.ok) {
-            const data = await response.json();
-            setEvent(data);
-          }
-        } catch (error) {
-          console.error("Error fetching featured event:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-
-      fetchFeaturedEvent();
-    }
-  }, [preloadedEvent]);
-
-  if (loading) {
-    return (
-      <div className="py-16 text-center text-white" data-oid="y:7cvn6">
-        Loading featured event...
-      </div>
-    );
-  }
-
-  if (!event) {
-    return null; // Or show a placeholder/default state
-  }
-
-  // Format the date
-  const eventDate = new Date(event.date);
-  const formattedDate = eventDate.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  });
-
+const FeaturedEvent: React.FC<FeaturedEventProps> = ({ event = defaultEvent }) => {
   return (
-    <section
-      className="py-16 md:py-1 px-4 bg-twisted-darker text-white"
-      data-oid="vom:r2s"
-    >
-      <div className="container mx-auto" data-oid="x7sx-1v">
-        <div
-          className="flex flex-col md:flex-row items-center justify-between gap-10 md:gap-16"
-          data-oid="r3m122t"
-        >
-          {/* Phone-shaped image container - Left side */}
-          <div
-            className="w-full md:w-1/2 lg:w-2/5 flex justify-center rounded-[1px] mt-[50px] mb-[50px]"
-            data-oid="1ig:2s6"
-          >
-            <div
-              className="relative w-full max-w-[280px] aspect-[9/16] rounded-[32px] border-2 border-twisted-neon overflow-hidden"
-              data-oid="t92xvbn"
-            >
-              {/* Time display overlay */}
-              <div
-                className="absolute top-6 left-0 right-0 z-10 text-center text-white text-xl font-medium"
-                data-oid=".4pyhgr"
-              >
-                9:16
-              </div>
+    // Section using black background to blend smoothly after the hero. Increased padding.
+    <section id="featured" className="py-20 md:py-28 px-4 bg-black text-white"> {/* Changed bg-brand-black to bg-black */}
+      <div className="container mx-auto">
 
+        {/* Centered "Featured" Title - Larger and using a neon color (match Hero's text-twisted-neon if defined) */}
+        <h2 className="text-5xl md:text-6xl lg:text-7xl font-heading text-neon-green text-center mb-16 md:mb-20"> {/* Assuming text-neon-green is defined */}
+          Featured
+        </h2>
+
+        {/* Main content container: Uses Flexbox for side-by-side layout on medium screens and up */}
+        <div className="flex flex-col md:flex-row items-center md:items-start gap-10 md:gap-16 lg:gap-20">
+
+          {/* Image Container (Left on Desktop) */}
+          {/* Larger width allocation (40% to 50%). Responsive max-width. order-2 ensures it's below text on mobile */}
+          <div className="w-full md:w-2/5 lg:w-[45%] order-2 md:order-1 flex justify-center md:justify-start">
+            {/* Relative container needed for Image with layout="fill" */}
+            <div className="relative w-full max-w-md lg:max-w-lg xl:max-w-xl aspect-[9/16] overflow-hidden rounded-lg shadow-2xl border-2 border-neon-green/60"> {/* Added border like Hero video */}
               <Image
                 src={event.imageUrl}
-                alt={`${event.title} Event`}
-                fill
-                sizes="(max-width: 768px) 80vw, (max-width: 1200px) 40vw, 33vw"
-                className="object-cover fixed top-auto right-auto bottom-auto left-auto flex mt-[5px]"
-                priority
-                data-oid=":2m82nh"
+                alt={`${event.title} Poster`}
+                layout="fill" // Fill the container
+                objectFit="cover" // Cover the area without stretching
+                className="transition-transform duration-300 ease-in-out hover:scale-105" // Optional subtle zoom on hover
+                priority // Consider adding priority if this image is often above the fold after scroll
               />
             </div>
           </div>
 
-          {/* Event details - Right side */}
-          <div
-            className="w-full md:w-1/2 lg:w-3/5 space-y-4 md:space-y-6 normal-case flex justify-start flex-col items-center"
-            data-oid="d-u34j1"
-          >
-            {/* Title */}
-            <h3
-              className="text-3xl md:text-4xl font-bold text-twisted-neon"
-              data-oid="i6vujmp"
-            >
+          {/* Details Container (Right on Desktop) */}
+          {/* flex-1 takes remaining space. order-1 ensures it's above image on mobile. Increased padding for gap. */}
+          <div className="flex-1 order-1 md:order-2 text-center md:text-left md:pl-4 lg:pl-6">
+            {/* Event Title - Significantly larger */}
+            <h3 className="text-4xl md:text-5xl lg:text-6xl font-heading text-white mb-5 md:mb-6">
               {event.title}
             </h3>
-
-            {/* Date and Time */}
-            <p className="text-xl md:text-2xl text-white" data-oid="auxq5pk">
-              {formattedDate} | {event.time}
+            {/* Event Details - Larger font sizes */}
+            <p className="text-xl md:text-2xl lg:text-3xl text-gray-300 font-body mb-4 md:mb-5">
+              {event.dateTime}
             </p>
-
-            {/* DJs */}
-            {event.djs && (
-              <p
-                className="text-lg md:text-xl text-white/80"
-                data-oid="2596xp4"
-              >
-                {event.djs}
-              </p>
-            )}
-
-            {/* Specials */}
-            {event.specials && (
-              <p
-                className="text-lg md:text-xl text-white/80"
-                data-oid="2427npn"
-              >
-                {event.specials}
-              </p>
-            )}
-
-            {/* View Event button */}
-            <div className="pt-4" data-oid="c:.7e8k">
-              <Link
-                href="/events"
-                className="inline-block px-6 py-3 border-2 border-twisted-neon text-twisted-neon font-medium rounded-md hover:bg-twisted-neon/10 transition-colors"
-                data-oid="zowx0nh"
-              >
-                View Event
-              </Link>
-            </div>
-
-            {/* Instagram handle */}
-            <div className="pt-2" data-oid=".jjhg0v">
-              <Link
-                href={defaultInstagram.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-white hover:text-twisted-neon transition-colors"
-                data-oid="4x4v3ws"
-              >
-                <Instagram size={20} data-oid="5eu39xz" />
-                <span data-oid="tzcymtd">{defaultInstagram.handle}</span>
-              </Link>
-            </div>
+            <p className="text-lg md:text-xl lg:text-2xl text-gray-400 font-body mb-4 md:mb-5">
+              DJs: {event.djs}
+            </p>
+            <p className="text-lg md:text-xl lg:text-2xl text-gray-400 font-body mb-6 md:mb-8">
+              Specials: {event.specials}
+            </p>
+            {/* Instagram Link - Larger and styled */}
+            <Link
+              href={event.instagramLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block text-neon-green text-lg md:text-xl lg:text-2xl font-body hover:underline hover:animate-buzz transition-all duration-150" // Assuming animate-buzz is defined
+            >
+              {event.instagramHandle}
+            </Link>
           </div>
+
         </div>
       </div>
+       {/* Ensure necessary styles are defined in tailwind.config or globals.css */}
+      {/* Example style block if needed, but prefer defining in config/globals */}
+      <style jsx global>{`
+        .text-neon-green { color: #2CFF05; } /* Match this to your theme */
+        .border-neon-green\\/60 { border-color: rgba(44, 255, 5, 0.6); }
+        .font-heading { font-family: /* Your heading font */; } /* E.g., 'PixelFontName1', sans-serif */
+        .font-body { font-family: /* Your body font */; } /* E.g., 'PixelFontName2', sans-serif */
+
+        /* Ensure 'animate-buzz' corresponds to a keyframe animation in tailwind.config.js */
+        /* Example (should be in tailwind.config.js ideally):
+        theme: {
+          extend: {
+            keyframes: {
+              buzz: {
+                '0%, 100%': { transform: 'translate(0, 0)' },
+                '25%': { transform: 'translate(-1px, 1px)' },
+                '50%': { transform: 'translate(1px, -1px)' },
+                '75%': { transform: 'translate(1px, 1px)' },
+              },
+            },
+            animation: {
+              buzz: 'buzz 0.1s infinite linear',
+            },
+          },
+        },
+        */
+       .hover\\:animate-buzz:hover {
+         animation: buzz 0.1s infinite linear; /* Direct application if needed */
+       }
+      `}</style>
     </section>
   );
 };

@@ -25,15 +25,16 @@ model MenuItem {
 }
 
 model Event {
-  id        String    @id @default(cuid())
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  title     String
-  date      DateTime
-  time      String
-  imageUrl  String
-  djs       String?
-  specials  String?
-  featured  Boolean   @default(false)
+  id            String    @id @default(cuid())
+  title         String
+  description   String?   // Added event description
+  date          DateTime  // Use DateTime for date
+  time          String?   // Keep time as string for flexibility (e.g., "8 PM - 2 AM")
+  featured      Boolean?  @default(false) // Added featured flag
+  imageUrl      String?   // Store the URL from UploadThing
+  djs           String?   // Could be a comma-separated list or JSON
+  specials      String?   // Description of specials
+  happyHourTime String?   // e.g., "5 PM - 7 PM"
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
-

@@ -1,17 +1,11 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/admin/create-menu-item/page": "app/admin/create-menu-item/page.js",
-  "/admin/events/page": "app/admin/events/page.js",
-  "/admin/create-event/page": "app/admin/create-event/page.js",
-  "/admin/menu/page": "app/admin/menu/page.js",
-  "/admin/edit-event/[id]/page": "app/admin/edit-event/[id]/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/api/events/[id]/route": "app/api/events/[id]/route.js",
-  "/api/events/route": "app/api/events/route.js",
-  "/events/page": "app/events/page.js",
-  "/api/menu-items/route": "app/api/menu-items/route.js",
-  "/menu/page": "app/menu/page.js",
   "/page": "app/page.js",
+  "/events/page": "app/events/page.js",
+  "/admin/events/page": "app/admin/events/page.js",
   "/info/page": "app/info/page.js",
-  "/api/uploadthing/route": "app/api/uploadthing/route.js"
+  "/api/events/route": "app/api/events/route.js",
+  "/admin/page": "app/admin/page.js",
+  "/admin/edit-event/[id]/page": "app/admin/edit-event/[id]/page.js",
+  "/api/events/[id]/route": "app/api/events/[id]/route.js"
 }

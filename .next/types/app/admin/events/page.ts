@@ -1,4 +1,4 @@
-// File: /Users/christianaguilar/Downloads/project/src/app/admin/events/page.tsx
+// File: /Users/christianaguilar/Downloads/project-twisted/src/app/admin/events/page.tsx
 import * as entry from '../../../../../src/app/admin/events/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

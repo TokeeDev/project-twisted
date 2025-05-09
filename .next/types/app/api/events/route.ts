@@ -1,4 +1,4 @@
-// File: /Users/christianaguilar/Downloads/project/src/app/api/events/route.ts
+// File: /Users/christianaguilar/Downloads/project-twisted/src/app/api/events/route.ts
 import * as entry from '../../../../../src/app/api/events/route.js'
 import type { NextRequest } from 'next/server.js'
 

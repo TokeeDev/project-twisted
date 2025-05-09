@@ -77,8 +77,28 @@ const EventCard: React.FC<{ event: PrismaEvent }> = ({ event }) => {
           {/* Assuming fixed location */}
         </p>
         {/* Optionally display DJs, Specials, etc. */}
-        {/* {event.djs && <p className="text-xs text-gray-400 mt-1">DJs: {event.djs}</p>} */}
-        {/* {event.specials && <p className="text-xs text-gray-400 mt-1">Specials: {event.specials}</p>} */}
+        {(() => {
+          const validDjs = Array.isArray(event.djs) ? event.djs.filter(dj => dj && dj.trim() !== '') : [];
+          if (validDjs.length > 0) {
+            return (
+              <p className="text-xs text-gray-400 mt-1">
+                DJs: {validDjs.join(', ')}
+              </p>
+            );
+          }
+          return null;
+        })()}
+        {(() => {
+          const validSpecials = Array.isArray(event.specials) ? event.specials.filter(special => special && special.trim() !== '') : [];
+          if (validSpecials.length > 0) {
+            return (
+              <p className="text-xs text-gray-400 mt-1">
+                Specials: {validSpecials.join(', ')}
+              </p>
+            );
+          }
+          return null;
+        })()}
       </div>
     </div>
   );

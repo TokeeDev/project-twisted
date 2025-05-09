@@ -388,42 +388,54 @@ const FeaturedEvent: React.FC = () => {
               </p>
 
               {/* Event DJs */}
-              {eventToDisplay.djs && eventToDisplay.djs.length > 0 && (
-                <div className="flex items-start text-xl md:text-2xl text-gray-300 font-body mb-2" data-oid="t8uw3qq">
-                  <User
-                    className="mr-3 mt-1 text-neon-green flex-shrink-0"
-                    size={28}
-                    data-oid=":610exr"
-                  />
-                  <div>
-                    <span className="font-semibold">DJs:</span>
-                    <ul className="list-disc list-inside ml-1 font-medium" data-oid="w1vpy7x">
-                      {eventToDisplay.djs.map((dj, index) => (
-                        <li key={`featured-dj-${index}`}>{dj}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
+              {(() => {
+                const validDjs = Array.isArray(eventToDisplay.djs) ? eventToDisplay.djs.filter(dj => dj && dj.trim() !== '') : [];
+                if (validDjs.length > 0) {
+                  return (
+                    <div className="flex items-start text-xl md:text-2xl text-gray-300 font-body mb-2" data-oid="t8uw3qq">
+                      <User
+                        className="mr-3 mt-1 text-neon-green flex-shrink-0"
+                        size={28}
+                        data-oid=":610exr"
+                      />
+                      <div>
+                        <span className="font-semibold">DJs:</span>
+                        <ul className="list-disc list-inside ml-1 font-medium" data-oid="w1vpy7x">
+                          {validDjs.map((dj, index) => (
+                            <li key={`featured-dj-${index}`}>{dj}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
 
               {/* Event Specials */}
-              {eventToDisplay.specials && eventToDisplay.specials.length > 0 && (
-                <div className="flex items-start text-xl md:text-2xl text-gray-300 font-body mb-6" data-oid="g.fdhy.">
-                  <Star
-                    className="mr-3 mt-1 text-neon-green flex-shrink-0"
-                    size={28}
-                    data-oid="1d6eo1b"
-                  />
-                  <div>
-                    <span className="font-semibold">Specials:</span>
-                    <ul className="list-disc list-inside ml-1 font-medium" data-oid="9qt60zr">
-                      {eventToDisplay.specials.map((special, index) => (
-                        <li key={`featured-special-${index}`}>{special}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
+              {(() => {
+                const validSpecials = Array.isArray(eventToDisplay.specials) ? eventToDisplay.specials.filter(special => special && special.trim() !== '') : [];
+                if (validSpecials.length > 0) {
+                  return (
+                    <div className="flex items-start text-xl md:text-2xl text-gray-300 font-body mb-6" data-oid="g.fdhy.">
+                      <Star
+                        className="mr-3 mt-1 text-neon-green flex-shrink-0"
+                        size={28}
+                        data-oid="1d6eo1b"
+                      />
+                      <div>
+                        <span className="font-semibold">Specials:</span>
+                        <ul className="list-disc list-inside ml-1 font-medium" data-oid="9qt60zr">
+                          {validSpecials.map((special, index) => (
+                            <li key={`featured-special-${index}`}>{special}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
 
               {/* Instagram Link (conditionally rendered) */}
               {eventToDisplay.instagramLink &&

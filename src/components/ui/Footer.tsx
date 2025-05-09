@@ -71,8 +71,8 @@ export default function Footer() {
           </p>
           <p className="flex items-center space-x-2 text-sm">
             <Mail size={16} />
-            <a href="mailto:info@twistedcantina.com" className="hover:text-[#39FF14]">
-              info@twistedcantina.com
+            <a href="mailto:jose@twistedcantina.com" className="hover:text-[#39FF14]">
+              jose@twistedcantina.com
             </a>
           </p>
         </div>
@@ -89,6 +89,10 @@ export default function Footer() {
             >
               <Instagram size={24} />
             </a>
+            <a
+             href="https://instagram.com/TwistedCantina"
+             className="hover:text-[#39FF14] transition"
+            >@Twistedcantina</a>
             {/* Add more icons here if desired */}
           </div>
         </div>

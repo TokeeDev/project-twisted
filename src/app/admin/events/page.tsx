@@ -56,10 +56,8 @@ export default function AdminEventsPage() {
         throw new Error("Failed to fetch events");
       }
       const data: Event[] = await response.json();
-      // Initial sort: all events, featured first, then by date descending
+      // Initial sort: all events by date descending
       data.sort((a, b) => {
-        if (a.featured && !b.featured) return -1;
-        if (!a.featured && b.featured) return 1;
         return new Date(b.date).getTime() - new Date(a.date).getTime();
       });
       setEvents(data);
@@ -140,24 +138,7 @@ export default function AdminEventsPage() {
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             data-oid="jd51y8m"
           />
-
-          {event.featured && !isPast && (
-            <span
-              className="absolute top-2 right-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-twisted-neon text-black shadow-md"
-              data-oid="p50-khr"
-            >
-              <Star size={14} className="mr-1" data-oid="srgtt4-" /> Featured
-            </span>
-          )}
         </div>
-      )}
-      {!event.imageUrl && event.featured && !isPast && (
-        <span
-          className="absolute top-2 right-2 inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-twisted-neon text-black shadow-md z-10 m-2"
-          data-oid="q5br16_"
-        >
-          <Star size={14} className="mr-1" data-oid="y84t3xv" /> Featured
-        </span>
       )}
 
       <div className="p-5 flex flex-col flex-grow" data-oid="b:.o3tl">

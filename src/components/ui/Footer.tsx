@@ -1,115 +1,116 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Copy, Instagram, Map } from 'lucide-react';
+import { useState } from "react";
+import { MapPin, Copy, Phone, Mail, Instagram } from "lucide-react";
 
-const Footer = () => {
+export default function Footer() {
   const [copied, setCopied] = useState(false);
-  
   const address = "1640 S Blue Island Ave, Chicago, IL 60608";
   const hours = [
-    { day: "Mon", hours: "Closed" },
-    { day: "Tue–Thu", hours: "5pm–12am" },
-    { day: "Fri–Sat", hours: "5pm–2am" },
-    { day: "Sun", hours: "5pm–12am" },
+    { day: "Mon – Tue", time: "Closed" },
+    { day: "Wed – Thu", time: "5 PM – 12 AM" },
+    { day: "Fri – Sat", time: "5 PM – 2 AM" },
+    { day: "Sun", time: "5 PM – 12 AM" },
   ];
-  
-  const handleCopyAddress = () => {
+
+  const handleCopy = () => {
     navigator.clipboard.writeText(address);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
-  
+
   return (
-    <footer id="contact" className="bg-twisted-darker pt-16 pb-8 relative overflow-hidden">
-      {/* Decorative elements */}
-      <div className="absolute top-0 right-0 vinyl-record-lg opacity-5"></div>
-      <div className="absolute bottom-0 left-0 cassette-tape-lg opacity-5"></div>
-      
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-12">
-          {/* Location */}
-          <div>
-            <h3 className="text-2xl font-bold mb-6 cyber-text">Location</h3>
-            <div className="relative chrome-border-sm p-6 mb-6">
-              <button 
-                onClick={handleCopyAddress}
-                className="flex items-center mb-4 hover:text-twisted-neon transition group"
-              >
-                <span className="mr-2">{address}</span>
-                <Copy size={16} className="group-hover:scale-110 transition" />
-              </button>
-              {copied && (
-                <div className="absolute top-0 right-0 bg-twisted-neon text-black py-1 px-2 text-xs">
-                  Copied!
-                </div>
-              )}
-              
-              <a 
-                href="https://www.google.com/maps?q=1640+S+Blue+Island+Ave%2C+Chicago%2C+IL+60608"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center text-sm text-twisted-neon hover:underline"
-              >
-                <Map size={16} className="mr-1" />
-                View on Google Maps
-              </a>
-            </div>
-          </div>
-          
-          {/* Hours */}
-          <div>
-            <h3 className="text-2xl font-bold mb-6 cyber-text">Hours</h3>
-            <div className="chrome-border-sm p-6">
-              <ul className="space-y-2">
-                {hours.map((item) => (
-                  <li key={item.day} className="flex justify-between">
-                    <span className="font-bold">{item.day}</span>
-                    <span>{item.hours}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            
-            <div className="mt-6">
-              <a 
-                href="https://instagram.com/twistedcantina"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center hover:text-twisted-neon transition"
-              >
-                <Instagram size={24} className="mr-2" />
-                @twistedcantina
-              </a>
-            </div>
-          </div>
-          
-          {/* About */}
-          <div className="lg:col-span-1 md:col-span-2">
-            <h3 className="text-2xl font-bold mb-6 cyber-text">About</h3>
-            <p className="mb-4">
-              Twisted Cantina is a Mexican-inspired cocktail bar and dance club in Pilsen, Chicago. 
-              Known for creative cocktails, tacos, and a vibrant nightlife scene with DJs and Sunday specials.
-            </p>
-            <p className="text-sm opacity-70">
-              We're a 21+ venue focused on providing the best nightlife experience in Chicago with 
-              an emphasis on quality drinks, food, and music in a unique atmosphere.
-            </p>
+    <footer className="bg-[#0a0a0a] text-[#DDD] px-6 py-16">
+      {/* Top Grid */}
+      <div className="max-w-6xl mx-auto grid gap-12 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+        {/* Find Us */}
+        <div>
+          <h4 className="text-xl font-bold mb-4">Find Us</h4>
+          <button
+            onClick={handleCopy}
+            className="flex items-center space-x-2 mb-2 text-sm hover:text-[#39FF14] transition"
+          >
+            <MapPin size={16} /> 
+            <span>{address}</span>
+            <Copy size={14} className="opacity-75" />
+          </button>
+          {copied && (
+            <p className="text-xs text-[#39FF14] mb-2">Address copied!</p>
+          )}
+          <a
+            href="https://maps.google.com?q=1640+S+Blue+Island+Ave+Chicago"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center space-x-1 text-sm hover:underline text-[#39FF14]"
+          >
+            <MapPin size={14} /> View on Google Maps
+          </a>
+        </div>
+
+        {/* Opening Hours */}
+        <div>
+          <h4 className="text-xl font-bold mb-4">Opening Hours</h4>
+          <ul className="space-y-1 text-sm">
+            {hours.map((h) => (
+              <li key={h.day} className="flex justify-between">
+                <span className="font-semibold">{h.day}</span>
+                <span>{h.time}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Contact */}
+        <div>
+          <h4 className="text-xl font-bold mb-4">Contact</h4>
+          <p className="flex items-center space-x-2 mb-2 text-sm">
+            <Phone size={16} />
+            <a href="tel:+13122650923" className="hover:text-[#39FF14]">
+              (312) 265-0923
+            </a>
+          </p>
+          <p className="flex items-center space-x-2 text-sm">
+            <Mail size={16} />
+            <a href="mailto:info@twistedcantina.com" className="hover:text-[#39FF14]">
+              info@twistedcantina.com
+            </a>
+          </p>
+        </div>
+
+        {/* Follow Us */}
+        <div>
+          <h4 className="text-xl font-bold mb-4">Follow Us</h4>
+          <div className="flex space-x-4">
+            <a
+              href="https://instagram.com/TwistedCantina"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-[#39FF14] transition"
+            >
+              <Instagram size={24} />
+            </a>
+            {/* Add more icons here if desired */}
           </div>
         </div>
-        
-        <div className="mt-12 pt-8 border-t border-white/20 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-center md:text-left mb-4 md:mb-0 text-sm opacity-70">
-            © {new Date().getFullYear()} Twisted Cantina. All rights reserved.
-          </p>
-          <div className="flex space-x-6">
-            <a href="#" className="text-sm hover:text-twisted-neon transition">Privacy Policy</a>
-            <a href="#" className="text-sm hover:text-twisted-neon transition">Terms of Service</a>
-          </div>
+      </div>
+
+      {/* Bottom Bar */}
+      <div className="max-w-6xl mx-auto mt-12 pt-8 border-t border-white/20 flex flex-col md:flex-row justify-between items-center text-sm">
+        <p className="mb-4 md:mb-0">
+          © {new Date().getFullYear()} <strong>Twisted Cantina</strong>. All rights reserved.
+        </p>
+        <div className="flex space-x-6">
+          <a href="#" className="hover:text-[#39FF14]">
+            Privacy Policy
+          </a>
+          <a href="#" className="hover:text-[#39FF14]">
+            Terms of Service
+          </a>
+          <a href="#" className="hover:text-[#39FF14]">
+            Accessibility
+          </a>
         </div>
       </div>
     </footer>
   );
-};
-
-export default Footer;
+}

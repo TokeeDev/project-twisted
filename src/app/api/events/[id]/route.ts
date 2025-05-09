@@ -1,24 +1,8 @@
+// File: app/api/events/[id]/route.ts
 import { NextResponse } from 'next/server';
 import { PrismaClient, Prisma } from '@prisma/client';
-import { z } from 'zod';
 
 const prisma = new PrismaClient();
-
-// Zod schema for validation (can reuse or adapt from the main route)
-// Optional fields for PUT as not all fields might be updated
-const eventUpdateSchema = z.object({
-  title: z.string().min(1, { message: 'Title is required' }).optional(),
-  description: z.string().optional().nullable(),
-  date: z.string().refine((date) => !isNaN(Date.parse(date)), { message: 'Invalid date format (use YYYY-MM-DD)' }).optional(),
-  startTime: z.string().min(1, { message: 'Start time is required' }).optional(),
-  endTime: z.string().min(1, { message: 'End time is required' }).optional(),
-  featured: z.boolean().optional(),
-  djs: z.array(z.string()).optional(),
-  happyHourStart: z.string().optional().nullable(),
-  happyHourEnd: z.string().optional().nullable(),
-  specials: z.array(z.string()).optional(),
-  imageUrl: z.string().url({ message: 'Valid image URL is required' }).optional(),
-});
 
 // GET /api/events/[id] - Fetch a single event by ID
 export async function GET(request: Request, { params }: { params: { id: string } }) {
@@ -30,7 +14,19 @@ export async function GET(request: Request, { params }: { params: { id: string }
     if (!event) {
       return NextResponse.json({ message: 'Event not found' }, { status: 404 });
     }
-    return NextResponse.json(event);
+
+    // Parse djs and specials from comma-separated strings to arrays
+    const formattedEvent = {
+      ...event,
+      djs: event.djs && typeof event.djs === 'string' 
+           ? event.djs.split(',').map(s => s.trim()).filter(s => s !== '') 
+           : (event.djs || []),
+      specials: event.specials && typeof event.specials === 'string' 
+                ? event.specials.split(',').map(s => s.trim()).filter(s => s !== '') 
+                : (event.specials || []),
+    };
+
+    return NextResponse.json(formattedEvent);
   } catch (error) {
     console.error(`Error fetching event ${id}:`, error);
     return NextResponse.json({ message: 'Error fetching event' }, { status: 500 });
@@ -39,63 +35,88 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
 
 // PUT /api/events/[id] - Update an event by ID
+// This handler now only considers fields present in the CreateEventPage.tsx form
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   const { id } = params;
   try {
     const body = await request.json();
-    const validation = eventUpdateSchema.safeParse(body);
-
-    if (!validation.success) {
-      return NextResponse.json({ message: 'Validation failed', errors: validation.error.flatten().fieldErrors }, { status: 400 });
-    }
 
     const dataToUpdate: Prisma.EventUpdateInput = {};
-    const validatedData = validation.data;
 
-    // Map validated fields to Prisma update input
-    if (validatedData.title) dataToUpdate.title = validatedData.title;
-    if (validatedData.description !== undefined) dataToUpdate.description = validatedData.description;
-    if (validatedData.date) dataToUpdate.date = new Date(validatedData.date);
-    if (validatedData.startTime && validatedData.endTime) {
-      dataToUpdate.time = `${validatedData.startTime} - ${validatedData.endTime}`;
-    }
-    if (validatedData.featured !== undefined) dataToUpdate.featured = validatedData.featured;
-    if (validatedData.djs) dataToUpdate.djs = validatedData.djs.join(', ');
-    if (validatedData.happyHourStart !== undefined && validatedData.happyHourEnd !== undefined) {
-        dataToUpdate.happyHourTime = validatedData.happyHourStart && validatedData.happyHourEnd ? `${validatedData.happyHourStart} - ${validatedData.happyHourEnd}` : null;
-    }
-    if (validatedData.specials) dataToUpdate.specials = validatedData.specials.join('; ');
-    if (validatedData.imageUrl) dataToUpdate.imageUrl = validatedData.imageUrl;
+    // --- Map fields strictly from the frontend form (CreateEventPage.tsx) ---
 
-    let updatedEvent;
-
-    // Use transaction if updating the 'featured' status
-    if (validatedData.featured !== undefined) {
-        await prisma.$transaction(async (tx) => {
-            // If setting this event to featured, unmark others first
-            if (validatedData.featured === true) {
-                await tx.event.updateMany({
-                    where: { id: { not: id }, featured: true }, // Unmark others
-                    data: { featured: false },
-                });
-            }
-            // Update the target event
-            updatedEvent = await tx.event.update({
-                where: { id },
-                data: dataToUpdate,
-            });
-        });
-    } else {
-        // Standard update if 'featured' is not changing
-        updatedEvent = await prisma.event.update({
-            where: { id },
-            data: dataToUpdate,
-        });
+    if (body.title !== undefined) {
+      if (typeof body.title === 'string' && body.title.trim() !== '') {
+        dataToUpdate.title = body.title;
+      } else if (typeof body.title === 'string' && body.title.trim() === '') {
+        // Allow explicitly setting title to empty if needed, though 'required' on form might prevent this.
+        // For PUT, often you only send fields you want to change.
+        // If an empty string means "remove title", your model should allow null or handle it.
+        // For now, let's assume a non-empty string is required if 'title' key is present.
+        return NextResponse.json({ message: 'Title, if provided for update, must be a non-empty string' }, { status: 400 });
+      }
     }
+
+    if (body.date !== undefined) {
+      if (typeof body.date === 'string' && !isNaN(Date.parse(body.date))) {
+        dataToUpdate.date = new Date(body.date);
+      } else {
+        return NextResponse.json({ message: 'Date, if provided for update, must be a valid date string (e.g., YYYY-MM-DD)' }, { status: 400 });
+      }
+    }
+
+    // 'time' is expected as a single string (start time)
+    if (body.time !== undefined) {
+        if (typeof body.time === 'string' && body.time.trim() !== '') {
+            dataToUpdate.time = body.time;
+        
+        } else {
+            return NextResponse.json({ message: 'Time, if provided for update, must be a non-empty string or null/empty to clear' }, { status: 400 });
+        }
+    }
+
+    if (body.djs !== undefined) {
+      if (Array.isArray(body.djs) && body.djs.every((dj: any) => typeof dj === 'string')) {
+        // Filter out empty strings before joining
+        const filteredDjs = body.djs.filter((dj: string) => dj.trim() !== "");
+        dataToUpdate.djs = filteredDjs.length > 0 ? filteredDjs.join(', ') : null; // Store as ", " separated string or null if all empty
+      } else {
+        return NextResponse.json({ message: 'DJs, if provided for update, must be an array of strings' }, { status: 400 });
+      }
+    }
+
+    if (body.specials !== undefined) {
+      if (Array.isArray(body.specials) && body.specials.every((s: any) => typeof s === 'string')) {
+        // Filter out empty strings before joining
+        const filteredSpecials = body.specials.filter((s: string) => s.trim() !== "");
+        dataToUpdate.specials = filteredSpecials.length > 0 ? filteredSpecials.join(', ') : null; // Store as ", " separated string or null if all empty
+      } else {
+        return NextResponse.json({ message: 'Specials, if provided for update, must be an array of strings' }, { status: 400 });
+      }
+    }
+
+    if (body.imageUrl !== undefined) {
+      if (typeof body.imageUrl === 'string' && (body.imageUrl.startsWith('http://') || body.imageUrl.startsWith('https://') || body.imageUrl === "")) {
+        dataToUpdate.imageUrl = body.imageUrl; // Allow empty string to clear URL
+      } else {
+        return NextResponse.json({ message: 'Image URL, if provided for update, must be a valid URL, an empty string, or null' }, { status: 400 });
+      }
+    }
+
+    // --- End of field mapping ---
+
+    if (Object.keys(dataToUpdate).length === 0) {
+      return NextResponse.json({ message: 'No valid fields provided for update' }, { status: 400 });
+    }
+
+    const updatedEvent = await prisma.event.update({
+        where: { id },
+        data: dataToUpdate,
+    });
 
     if (!updatedEvent) {
-        // Should not happen if transaction logic is correct, but good practice
-        return NextResponse.json({ message: 'Event not found or update failed' }, { status: 404 });
+        // Should be caught by Prisma P2025 error if ID not found
+        return NextResponse.json({ message: 'Event not found or update failed (unexpected)' }, { status: 404 });
     }
 
     return NextResponse.json(updatedEvent);
@@ -103,7 +124,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   } catch (error) {
     console.error(`Error updating event ${id}:`, error);
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2025') { // Record to update not found
+      if (error.code === 'P2025') { // "Record to update not found"
         return NextResponse.json({ message: 'Event not found' }, { status: 404 });
       }
     }
@@ -118,19 +139,14 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
     await prisma.event.delete({
       where: { id },
     });
-    return NextResponse.json({ message: 'Event deleted successfully' }, { status: 200 }); // Can also use 204 No Content
+    return NextResponse.json({ message: 'Event deleted successfully' }, { status: 200 });
   } catch (error) {
     console.error(`Error deleting event ${id}:`, error);
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      if (error.code === 'P2025') { // Record to delete not found
+      if (error.code === 'P2025') { // "Record to delete not found"
         return NextResponse.json({ message: 'Event not found' }, { status: 404 });
       }
     }
     return NextResponse.json({ message: 'Error deleting event' }, { status: 500 });
   }
 }
-
-// Ensure Prisma Client disconnects when the server stops (optional here, but good practice)
-process.on('beforeExit', async () => {
-  await prisma.$disconnect();
-});

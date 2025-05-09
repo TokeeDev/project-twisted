@@ -1,132 +1,95 @@
-import { NextResponse } from 'next/server';
-import { PrismaClient, Prisma } from '@prisma/client'; // Import Prisma type
+import { NextRequest, NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// GET /api/events - Fetch all events
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const featured = searchParams.get('featured'); // Check for ?featured=true query param
-
+export async function POST(req: NextRequest) {
   try {
-    // Define whereClause with the correct Prisma type
-    const whereClause: Prisma.EventWhereInput = featured === 'true' ? { featured: true } : {};
-    const events = await prisma.event.findMany({
-      where: whereClause, // Remove 'as any'
-      orderBy: {
-        date: 'asc', // Order by date
-      },
-    });
-    return NextResponse.json(events);
-  } catch (error) {
-    console.error('Error fetching events:', error);
-    return NextResponse.json({ message: 'Error fetching events' }, { status: 500 });
-  }
-}
+    const data = await req.json();
 
-import { z } from 'zod';
-
-// Zod schema for validation (reusable for POST and PUT)
-const eventSchema = z.object({
-  title: z.string().min(1, { message: 'Title is required' }),
-  description: z.string().optional(),
-  date: z.string().refine((date) => !isNaN(Date.parse(date)), { message: 'Invalid date format (use YYYY-MM-DD)' }),
-  startTime: z.string().min(1, { message: 'Start time is required' }),
-  endTime: z.string().min(1, { message: 'End time is required' }),
-  featured: z.boolean().optional().default(false),
-  djs: z.array(z.string()).optional(),
-  happyHourStart: z.string().optional(),
-  happyHourEnd: z.string().optional(),
-  specials: z.array(z.string()).optional(),
-  imageUrl: z.string().url({ message: 'Valid image URL is required' }),
-});
-
-// POST /api/events - Create a new event
-export async function POST(request: Request) {
-  try {
-    const body = await request.json();
-    const validation = eventSchema.safeParse(body);
-
-    if (!validation.success) {
-      return NextResponse.json({ message: 'Validation failed', errors: validation.error.flatten().fieldErrors }, { status: 400 });
-    }
-
+    // Parse and validate required fields
     const {
       title,
-      description,
       date,
-      startTime,
-      endTime,
-      featured,
+      time,
       djs,
-      happyHourStart,
-      happyHourEnd,
       specials,
+      instagram,
+      website,
       imageUrl,
-    } = validation.data;
+      address,
+    } = data;
 
-    const time = `${startTime} - ${endTime}`;
-    const happyHourTime = happyHourStart && happyHourEnd ? `${happyHourStart} - ${happyHourEnd}` : null;
+    if (!title || !date || !imageUrl) {
+      return NextResponse.json(
+        { error: "Missing required fields." },
+        { status: 400 }
+      );
+    }
 
-    let newEvent;
+    // Convert date to Date object
+    let eventDate: Date;
+    try {
+      eventDate = new Date(date);
+      if (isNaN(eventDate.getTime())) throw new Error();
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid date format." },
+        { status: 400 }
+      );
+    }
 
-    // Use a transaction to ensure atomicity when handling the 'featured' flag
-    await prisma.$transaction(async (tx) => {
-      // If this event is marked as featured, unmark all other events first
-      if (featured) {
-        await tx.event.updateMany({
-          where: { featured: true },
-          data: { featured: false },
-        });
-      }
+    // Format DJs and specials as comma-separated strings for Prisma
+    const djsString = Array.isArray(djs) ? djs.join(", ") : "";
+    const specialsString = Array.isArray(specials) ? specials.join(", ") : "";
 
-      // Create the new event
-      newEvent = await tx.event.create({
-        data: {
-          title,
-          description,
-          date: new Date(date), // Convert validated date string to Date object
-          time: time,
-          featured: featured,
-          djs: djs?.join(', '), // Store as comma-separated string
-          happyHourTime: happyHourTime,
-          specials: specials?.join('; '), // Store as semi-colon separated string
-          imageUrl,
-        },
-      });
+    // Create the event in the database
+    const event = await prisma.event.create({
+      data: {
+        title,
+        date: eventDate,
+        time: time || null,
+        djs: djsString,
+        specials: specialsString,
+        imageUrl,
+        // If you want to store Instagram and website, make sure your schema supports it
+        // instagram,
+        // website,
+        // address, // If you want to store address, make sure your schema supports it
+      },
     });
 
-    return NextResponse.json(newEvent, { status: 201 });
-
+    return NextResponse.json(event, { status: 201 });
   } catch (error) {
-    console.error('Error creating event:', error);
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      // Handle specific Prisma errors like unique constraints
-      if (error.code === 'P2002') {
-        return NextResponse.json({ message: 'An event with similar details might already exist.' }, { status: 409 });
-      }
-    }
-    if (error instanceof Error && error.message.includes('Invalid date')) {
-        return NextResponse.json({ message: 'Invalid date format provided' }, { status: 400 });
-    }
-    return NextResponse.json({ message: 'Error creating event' }, { status: 500 });
+    console.error("API Error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
 
-// PUT /api/events/[id] - Update an existing event
-// Note: We need a dynamic route file [id]/route.ts for this, but for simplicity, adding here.
-// In a real app, move PUT and DELETE to /api/events/[id]/route.ts
+export async function GET(req: NextRequest) {
+  try {
+    const events = await prisma.event.findMany({
+      orderBy: {
+        date: 'asc', // Fetch events sorted by date
+      },
+    });
 
-// DELETE /api/events/[id] - Delete an event
-// Note: Similarly, this should be in a dynamic route file.
+    // Parse comma-separated strings back into arrays
+    const formattedEvents = events.map(event => ({
+      ...event,
+      djs: event.djs ? event.djs.split(',').map(s => s.trim()).filter(s => s !== '') : [],
+      specials: event.specials ? event.specials.split(',').map(s => s.trim()).filter(s => s !== '') : [],
+    }));
 
-// Ensure Prisma Client disconnects when the server stops
-process.on('beforeExit', async () => {
-  await prisma.$disconnect();
-});
-
-// Helper function to get event ID from URL (Needed if PUT/DELETE were here)
-// function getEventIdFromUrl(url: string): string | null {
-//   const match = url.match(/\/api\/events\/([^\/]+)/);
-//   return match ? match[1] : null;
-// }
+    return NextResponse.json(formattedEvents);
+  } catch (error) {
+    console.error("API Error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error fetching events" },
+      { status: 500 }
+    );
+  }
+}
